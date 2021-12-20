@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HaruClass</title>
+    <style>
+        /* 176 77 */
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .justfify-content-between {
+            justify-content: space-between;
+
+        }
+
+        .align-item-center {
+            align-items: center;
+        }
+
+        .padding-top-60 {
+            padding-top: 60px;
+        }
+
+        .padding-right-77 {
+            padding-right: 77px;
+        }
+
+        .padding-left-193 {
+            padding-left: 193px;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 36px;
+            line-height: 49px;
+
+        }
+
+        .header-menus {
+            font-style: normal;
+            font-weight: 500;
+            font-size: 24px;
+            line-height: 33px;
+        }
+
+        .header-menus li {
+            padding: 0px 40px;
+        }
+
+        .banner {
+            /* position: relative; */
+        }
+
+        header {
+            position: fixed;
+            width: 100%;
+            color: #fff;
+            z-index: 1;
+        }
+
+        .header-menus a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .header-menus a:hover {
+            text-decoration: underline;
+            /* color: #000; */
+        }
+
+        .position-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .temperature {
+            font-weight: 500;
+            font-size: 100px;
+            line-height: 136px;
+            color: #fff;
+            text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .input-container {
+            max-width: 796px;
+        }
+        .input-container input{
+            width: 100%;
+        }
+        section {
+            position: absolute;
+            height: 598px;
+            width: 100%;
+            background-color: #eee;
+            background-image: url('./images/banner.png');
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        img {
+            max-width: 100%;
+        }
+        .img-container{
+            width: 798;
+        }
+    </style>
+
+</head>
+
+<body>
+    <header class="flex justfify-content-between padding-top-60  align-item-center">
+        <div class="logo padding-left-193">GOTaiwan </div>
+        <div>
+            <ul class="flex header-menus">
+                <li>
+                    <a href="javascript:;"> 好去處 </a>
+                </li>
+                <li>
+                    <a href="javascript:;"> 好好玩 </a>
+                </li>
+                <li>
+                    <a href="javascript:;"> 好住宿 </a>
+                </li>
+                <li>
+                    <a href="javascript:;"> 好好評 </a>
+                </li>
+            </ul>
+
+        </div>
+        <div>
+            <img class="padding-right-77" src="./images/icon_like.png" alt="">
+        </div>
+    </header>
+    <main>
+        <!-- <section>
+            <img src="./images/banner.png" alt="">
+            <div class="position-center">
+                <div class="temperature">Taipei,35°C</div>
+                <div class="input-container">
+                    <input type="text">
+                </div>
+            </div>
+        </section> -->
+        <section>
+            <div class="img-container">
+                <div class="temperature">Taipei,35°C</div>
+                <div class="input-container">
+                    <input type="text">
+                </div>
+            </div>
+          
+        </section>
+
+    </main>
+    <footer></footer>
+
+</html>
