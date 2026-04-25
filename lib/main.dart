@@ -75,7 +75,7 @@ class HomePage extends StatelessWidget {
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(24, 72, 24, 36),
-                      child: _HeroSection(projectCount: _projects.length),
+                      child: _HeroSection(),
                     ),
                   ),
                   SliverToBoxAdapter(
@@ -159,9 +159,7 @@ class _TopBar extends StatelessWidget {
 }
 
 class _HeroSection extends StatelessWidget {
-  const _HeroSection({required this.projectCount});
-
-  final int projectCount;
+  const _HeroSection();
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +177,7 @@ class _HeroSection extends StatelessWidget {
                 border: Border.all(color: const Color(0x33FFF3D2)),
               ),
               child: Text(
-                '$projectCount project lanes, one public home',
+                'Project homepage',
                 style: const TextStyle(
                   color: Color(0xFFE3B45B),
                   fontWeight: FontWeight.w700,
@@ -189,7 +187,7 @@ class _HeroSection extends StatelessWidget {
             ),
             const SizedBox(height: 28),
             const Text(
-              'A launch desk for wildly different web projects.',
+              'Awkward Sky Projects',
               style: TextStyle(
                 fontFamily: 'Georgia',
                 color: Color(0xFFFFF3D2),
@@ -203,7 +201,7 @@ class _HeroSection extends StatelessWidget {
             ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 760),
               child: const Text(
-                'This homepage is the index for independent GitHub Pages projects. Each card can point to a separate repository such as /ReactionSpeedLab/ or any future project path.',
+                '這裡整理我發布在 GitHub Pages 的作品。第一個是 ReactionSpeedLab，之後的新專案也會加在這裡。',
                 style: TextStyle(
                   color: Color(0xFFC6D0DF),
                   fontSize: 20,
