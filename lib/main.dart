@@ -784,8 +784,6 @@ class AppCopy {
     required this.futureStatus,
     required this.reactionCategory,
     required this.reactionDescription,
-    required this.dashboardCategory,
-    required this.dashboardDescription,
     required this.futureName,
     required this.futureCategory,
     required this.futureDescription,
@@ -805,8 +803,6 @@ class AppCopy {
   final String futureStatus;
   final String reactionCategory;
   final String reactionDescription;
-  final String dashboardCategory;
-  final String dashboardDescription;
   final String futureName;
   final String futureCategory;
   final String futureDescription;
@@ -820,7 +816,7 @@ class AppCopy {
         eyebrow: 'Project homepage',
         title: 'Awkward Sky Projects',
         subtitle:
-            '這裡整理我發布在 GitHub Pages 的作品，目前包含 ReactionSpeedLab 與 DashboardLab。',
+            '這裡整理我發布在 GitHub Pages 的作品。第一個是 ReactionSpeedLab，之後的新專案也會加在這裡。',
         projectsHeading: 'Projects',
         openProject: '開啟專案',
         comingSoon: '即將加入',
@@ -829,9 +825,6 @@ class AppCopy {
         futureStatus: '規劃中',
         reactionCategory: '互動網頁工具',
         reactionDescription: '測試點擊反應速度的小工具，支援多語系、主題切換，以及後續放置廣告版位的空間。',
-        dashboardCategory: '資料儀表板實驗',
-        dashboardDescription:
-            '測試不同資料展示方式的靜態 dashboard，包含 KPI、圖表、表格、時間軸與系統狀態區塊。',
         futureName: '更多專案',
         futureCategory: '專案索引',
         futureDescription: '新的工具、實驗或作品上線後，會以獨立卡片整理在這裡。',
@@ -843,7 +836,7 @@ class AppCopy {
         eyebrow: 'Project homepage',
         title: 'Awkward Sky Projects',
         subtitle:
-            'A simple index for projects published on GitHub Pages, currently featuring ReactionSpeedLab and DashboardLab.',
+            'A simple index for projects published on GitHub Pages. The first live project is ReactionSpeedLab, with more projects to come.',
         projectsHeading: 'Projects',
         openProject: 'Open project',
         comingSoon: 'Coming soon',
@@ -854,9 +847,6 @@ class AppCopy {
         reactionCategory: 'Interactive web tool',
         reactionDescription:
             'A reaction speed test for the browser, with multilingual controls, theme switching, and space for future ad placements.',
-        dashboardCategory: 'Dashboard experiment',
-        dashboardDescription:
-            'A static dashboard for trying different data presentation patterns, including KPIs, charts, tables, timelines, and status views.',
         futureName: 'More Projects',
         futureCategory: 'Project index',
         futureDescription:
@@ -869,7 +859,7 @@ class AppCopy {
         eyebrow: 'Project homepage',
         title: 'Awkward Sky Projects',
         subtitle:
-            'GitHub Pages で公開しているプロジェクトをまとめるページです。現在は ReactionSpeedLab と DashboardLab を掲載しています。',
+            'GitHub Pages で公開しているプロジェクトをまとめるページです。最初の公開プロジェクトは ReactionSpeedLab です。',
         projectsHeading: 'Projects',
         openProject: 'プロジェクトを開く',
         comingSoon: '準備中',
@@ -878,9 +868,6 @@ class AppCopy {
         futureStatus: '計画中',
         reactionCategory: 'インタラクティブ Web ツール',
         reactionDescription: 'ブラウザで反応速度を測定できるツールです。多言語、テーマ切替、今後の広告枠に対応しています。',
-        dashboardCategory: 'ダッシュボード実験',
-        dashboardDescription:
-            'KPI、チャート、テーブル、タイムライン、ステータス表示など、データの見せ方を試す静的ダッシュボードです。',
         futureName: 'More Projects',
         futureCategory: 'プロジェクト一覧',
         futureDescription: '新しいツール、実験、デモは個別のカードとしてここに追加します。',
@@ -912,13 +899,6 @@ class ProjectShowcase {
         status: copy.liveStatus,
         category: copy.reactionCategory,
         description: copy.reactionDescription,
-      ),
-      ProjectShowcase(
-        name: 'DashboardLab',
-        url: 'https://awkwardsky.github.io/DashboardLab/',
-        status: copy.liveStatus,
-        category: copy.dashboardCategory,
-        description: copy.dashboardDescription,
       ),
       ProjectShowcase(
         name: copy.futureName,
