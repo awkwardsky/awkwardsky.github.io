@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:awkwardsky_home/main.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -13,7 +12,9 @@ void main() {
     await tester.pumpWidget(const AwkwardSkyHomeApp());
 
     expect(find.text('awkwardsky.github.io'), findsOneWidget);
+    expect(find.text('語言切換'), findsOneWidget);
+    expect(find.byIcon(Icons.light_mode_rounded), findsOneWidget);
     expect(find.text('ReactionSpeedLab'), findsOneWidget);
-    expect(find.text('Different Experiments'), findsOneWidget);
+    expect(find.text('更多專案'), findsOneWidget);
   });
 }

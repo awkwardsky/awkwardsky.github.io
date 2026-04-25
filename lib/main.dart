@@ -5,89 +5,131 @@ void main() {
   runApp(const AwkwardSkyHomeApp());
 }
 
-class AwkwardSkyHomeApp extends StatelessWidget {
+class AwkwardSkyHomeApp extends StatefulWidget {
   const AwkwardSkyHomeApp({super.key});
+
+  @override
+  State<AwkwardSkyHomeApp> createState() => _AwkwardSkyHomeAppState();
+}
+
+class _AwkwardSkyHomeAppState extends State<AwkwardSkyHomeApp> {
+  ThemeMode _themeMode = ThemeMode.dark;
+  AppLanguage _language = AppLanguage.zhHant;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Awkward Sky Projects',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFFE3B45B),
-          brightness: Brightness.dark,
-        ),
-        fontFamily: 'Trebuchet MS',
-        scaffoldBackgroundColor: const Color(0xFF11151C),
-        textTheme: Theme.of(context).textTheme.apply(
-          bodyColor: const Color(0xFFE9EDF5),
-          displayColor: const Color(0xFFFFF3D2),
-        ),
+      themeMode: _themeMode,
+      theme: _buildTheme(Brightness.light),
+      darkTheme: _buildTheme(Brightness.dark),
+      home: HomePage(
+        language: _language,
+        themeMode: _themeMode,
+        onLanguageChanged: (language) => setState(() => _language = language),
+        onToggleTheme: () {
+          setState(() {
+            _themeMode = _themeMode == ThemeMode.dark
+                ? ThemeMode.light
+                : ThemeMode.dark;
+          });
+        },
       ),
-      home: const HomePage(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+ThemeData _buildTheme(Brightness brightness) {
+  final isDark = brightness == Brightness.dark;
+  final colorScheme = ColorScheme.fromSeed(
+    seedColor: const Color(0xFF007AFF),
+    brightness: brightness,
+  );
 
-  static const List<ProjectShowcase> _projects = [
-    ProjectShowcase(
-      name: 'ReactionSpeedLab',
-      url: 'https://awkwardsky.github.io/ReactionSpeedLab/',
-      status: 'Live',
-      category: 'Interactive Web Lab',
-      description:
-          'A browser-based reaction speed test with multilingual controls, theme switching, and room for future monetization experiments.',
-      accent: Color(0xFF87E36B),
-      isLive: true,
+  return ThemeData(
+    useMaterial3: true,
+    brightness: brightness,
+    colorScheme: colorScheme,
+    scaffoldBackgroundColor: isDark
+        ? const Color(0xFF050507)
+        : const Color(0xFFF5F5F7),
+    textTheme: Typography.material2021().black.apply(
+      bodyColor: isDark ? const Color(0xFFF5F5F7) : const Color(0xFF1D1D1F),
+      displayColor: isDark ? const Color(0xFFFFFFFF) : const Color(0xFF1D1D1F),
     ),
-    ProjectShowcase(
-      name: 'Different Experiments',
-      url: 'https://awkwardsky.github.io/',
-      status: 'Planning',
-      category: 'Project Index',
-      description:
-          'A home base for tools, demos, dashboards, small games, and other projects that should feel intentionally different from each other.',
-      accent: Color(0xFFE38D6B),
-      isLive: false,
+    filledButtonTheme: FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+        backgroundColor: const Color(0xFF007AFF),
+        foregroundColor: Colors.white,
+        disabledBackgroundColor: isDark
+            ? const Color(0xFF2A2A2E)
+            : const Color(0xFFE5E5EA),
+        disabledForegroundColor: isDark
+            ? const Color(0xFF8E8E93)
+            : const Color(0xFF6E6E73),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        shape: const StadiumBorder(),
+      ),
     ),
-  ];
+  );
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({
+    required this.language,
+    required this.themeMode,
+    required this.onLanguageChanged,
+    required this.onToggleTheme,
+    super.key,
+  });
+
+  final AppLanguage language;
+  final ThemeMode themeMode;
+  final ValueChanged<AppLanguage> onLanguageChanged;
+  final VoidCallback onToggleTheme;
 
   @override
   Widget build(BuildContext context) {
+    final copy = AppCopy.of(language);
+    final projects = ProjectShowcase.localized(copy);
+
     return Scaffold(
       body: SelectionArea(
         child: Stack(
           children: [
-            const Positioned.fill(child: _Atmosphere()),
+            const Positioned.fill(child: _PageBackground()),
             SafeArea(
               child: CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(24, 22, 24, 0),
-                      child: _TopBar(onOpenReactionLab: _openReactionLab),
+                      padding: const EdgeInsets.fromLTRB(22, 22, 22, 0),
+                      child: _TopBar(
+                        copy: copy,
+                        language: language,
+                        themeMode: themeMode,
+                        onLanguageChanged: onLanguageChanged,
+                        onToggleTheme: onToggleTheme,
+                      ),
                     ),
                   ),
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(24, 72, 24, 36),
-                      child: _HeroSection(),
+                      padding: const EdgeInsets.fromLTRB(22, 92, 22, 52),
+                      child: _HeroSection(copy: copy),
                     ),
                   ),
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 56),
-                      child: _ProjectGrid(projects: _projects),
+                      padding: const EdgeInsets.fromLTRB(22, 0, 22, 58),
+                      child: _ProjectGrid(projects: projects, copy: copy),
                     ),
                   ),
-                  const SliverToBoxAdapter(
+                  SliverToBoxAdapter(
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(24, 0, 24, 32),
-                      child: _Footer(),
+                      padding: const EdgeInsets.fromLTRB(22, 0, 22, 34),
+                      child: _Footer(copy: copy),
                     ),
                   ),
                 ],
@@ -98,114 +140,300 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-
-  static Future<void> _openReactionLab() async {
-    await _openUrl('https://awkwardsky.github.io/ReactionSpeedLab/');
-  }
 }
 
 class _TopBar extends StatelessWidget {
-  const _TopBar({required this.onOpenReactionLab});
+  const _TopBar({
+    required this.copy,
+    required this.language,
+    required this.themeMode,
+    required this.onLanguageChanged,
+    required this.onToggleTheme,
+  });
 
-  final VoidCallback onOpenReactionLab;
+  final AppCopy copy;
+  final AppLanguage language;
+  final ThemeMode themeMode;
+  final ValueChanged<AppLanguage> onLanguageChanged;
+  final VoidCallback onToggleTheme;
 
   @override
   Widget build(BuildContext context) {
+    final colors = _AppleColors.of(context);
+
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 1180),
-        child: Row(
+        constraints: const BoxConstraints(maxWidth: 1080),
+        child: Wrap(
+          spacing: 14,
+          runSpacing: 14,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          alignment: WrapAlignment.spaceBetween,
           children: [
-            Container(
-              width: 42,
-              height: 42,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                gradient: const LinearGradient(
-                  colors: [Color(0xFFE3B45B), Color(0xFF87E36B)],
-                ),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0x553E2B10),
-                    blurRadius: 24,
-                    offset: Offset(0, 12),
+            SizedBox(
+              width: 280,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: colors.primaryText,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.auto_awesome_rounded,
+                      color: colors.background,
+                      size: 19,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Flexible(
+                    child: Text(
+                      copy.siteName,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: colors.primaryText,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -.2,
+                      ),
+                    ),
                   ),
                 ],
               ),
-              child: const Icon(Icons.auto_awesome, color: Color(0xFF11151C)),
             ),
-            const SizedBox(width: 14),
-            const Expanded(
-              child: Text(
-                'awkwardsky.github.io',
-                style: TextStyle(
-                  color: Color(0xFFFFF3D2),
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: .4,
-                ),
-              ),
-            ),
-            OutlinedButton.icon(
-              onPressed: onOpenReactionLab,
-              icon: const Icon(Icons.open_in_new, size: 18),
-              label: const Text('Open first project'),
+            _TopBarControls(
+              copy: copy,
+              language: language,
+              themeMode: themeMode,
+              onLanguageChanged: onLanguageChanged,
+              onToggleTheme: onToggleTheme,
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _TopBarControls extends StatelessWidget {
+  const _TopBarControls({
+    required this.copy,
+    required this.language,
+    required this.themeMode,
+    required this.onLanguageChanged,
+    required this.onToggleTheme,
+  });
+
+  final AppCopy copy;
+  final AppLanguage language;
+  final ThemeMode themeMode;
+  final ValueChanged<AppLanguage> onLanguageChanged;
+  final VoidCallback onToggleTheme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 12,
+      runSpacing: 12,
+      crossAxisAlignment: WrapCrossAlignment.end,
+      children: [
+        _ThemeIconButton(
+          label: copy.themeToggleLabel,
+          isDark: themeMode == ThemeMode.dark,
+          onPressed: onToggleTheme,
+        ),
+        _LanguageSelect(
+          label: copy.languageLabel,
+          value: language,
+          onChanged: onLanguageChanged,
+        ),
+      ],
+    );
+  }
+}
+
+class _ThemeIconButton extends StatelessWidget {
+  const _ThemeIconButton({
+    required this.label,
+    required this.isDark,
+    required this.onPressed,
+  });
+
+  final String label;
+  final bool isDark;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = _AppleColors.of(context);
+
+    return Semantics(
+      button: true,
+      label: label,
+      child: Tooltip(
+        message: label,
+        child: InkWell(
+          customBorder: const CircleBorder(),
+          onTap: onPressed,
+          child: Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: colors.control,
+              shape: BoxShape.circle,
+              border: Border.all(color: colors.border),
+              boxShadow: [
+                BoxShadow(
+                  color: colors.shadow,
+                  blurRadius: 24,
+                  offset: const Offset(0, 12),
+                ),
+              ],
+            ),
+            child: Icon(
+              isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+              color: colors.primaryText,
+              size: 21,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _LanguageSelect extends StatelessWidget {
+  const _LanguageSelect({
+    required this.label,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final String label;
+  final AppLanguage value;
+  final ValueChanged<AppLanguage> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = _AppleColors.of(context);
+
+    return SizedBox(
+      width: 210,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 2, bottom: 8),
+            child: Text(
+              label,
+              style: TextStyle(
+                color: colors.secondaryText,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                letterSpacing: .8,
+              ),
+            ),
+          ),
+          Container(
+            height: 50,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              color: colors.control,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: colors.border),
+              boxShadow: [
+                BoxShadow(
+                  color: colors.shadow,
+                  blurRadius: 24,
+                  offset: const Offset(0, 12),
+                ),
+              ],
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<AppLanguage>(
+                value: value,
+                isExpanded: true,
+                dropdownColor: colors.menu,
+                borderRadius: BorderRadius.circular(16),
+                icon: Icon(
+                  Icons.expand_more_rounded,
+                  color: colors.primaryText,
+                ),
+                style: TextStyle(
+                  color: colors.primaryText,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+                items: [
+                  for (final language in AppLanguage.values)
+                    DropdownMenuItem(
+                      value: language,
+                      child: Text(language.label),
+                    ),
+                ],
+                onChanged: (language) {
+                  if (language != null) {
+                    onChanged(language);
+                  }
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
 class _HeroSection extends StatelessWidget {
-  const _HeroSection();
+  const _HeroSection({required this.copy});
+
+  final AppCopy copy;
 
   @override
   Widget build(BuildContext context) {
+    final colors = _AppleColors.of(context);
+
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 1180),
+        constraints: const BoxConstraints(maxWidth: 1080),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: const Color(0x1AFFF3D2),
-                borderRadius: BorderRadius.circular(999),
-                border: Border.all(color: const Color(0x33FFF3D2)),
-              ),
-              child: Text(
-                'Project homepage',
-                style: const TextStyle(
-                  color: Color(0xFFE3B45B),
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: .5,
-                ),
+            Text(
+              copy.eyebrow,
+              style: TextStyle(
+                color: colors.secondaryText,
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                letterSpacing: .2,
               ),
             ),
-            const SizedBox(height: 28),
-            const Text(
-              'Awkward Sky Projects',
+            const SizedBox(height: 18),
+            Text(
+              copy.title,
               style: TextStyle(
-                fontFamily: 'Georgia',
-                color: Color(0xFFFFF3D2),
-                fontSize: 72,
+                color: colors.primaryText,
+                fontSize: 76,
                 height: .95,
-                fontWeight: FontWeight.w700,
-                letterSpacing: -2.8,
+                fontWeight: FontWeight.w800,
+                letterSpacing: -3.8,
               ),
             ),
             const SizedBox(height: 24),
             ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 760),
-              child: const Text(
-                '這裡整理我發布在 GitHub Pages 的作品。第一個是 ReactionSpeedLab，之後的新專案也會加在這裡。',
+              constraints: const BoxConstraints(maxWidth: 700),
+              child: Text(
+                copy.subtitle,
                 style: TextStyle(
-                  color: Color(0xFFC6D0DF),
-                  fontSize: 20,
-                  height: 1.55,
+                  color: colors.secondaryText,
+                  fontSize: 21,
+                  height: 1.5,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -217,41 +445,57 @@ class _HeroSection extends StatelessWidget {
 }
 
 class _ProjectGrid extends StatelessWidget {
-  const _ProjectGrid({required this.projects});
+  const _ProjectGrid({required this.projects, required this.copy});
 
   final List<ProjectShowcase> projects;
+  final AppCopy copy;
 
   @override
   Widget build(BuildContext context) {
+    final colors = _AppleColors.of(context);
+
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 1180),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final columns = constraints.maxWidth >= 1040
-                ? 3
-                : constraints.maxWidth >= 700
-                ? 2
-                : 1;
-            const spacing = 18.0;
-            final cardWidth =
-                (constraints.maxWidth - (spacing * (columns - 1))) / columns;
+        constraints: const BoxConstraints(maxWidth: 1080),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              copy.projectsHeading,
+              style: TextStyle(
+                color: colors.primaryText,
+                fontSize: 24,
+                fontWeight: FontWeight.w800,
+                letterSpacing: -.7,
+              ),
+            ),
+            const SizedBox(height: 18),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final columns = constraints.maxWidth >= 760 ? 2 : 1;
+                const spacing = 18.0;
+                final cardWidth =
+                    (constraints.maxWidth - (spacing * (columns - 1))) /
+                    columns;
 
-            return Wrap(
-              spacing: spacing,
-              runSpacing: spacing,
-              children: [
-                for (final entry in projects.indexed)
-                  SizedBox(
-                    width: cardWidth,
-                    child: _AnimatedProjectCard(
-                      delayIndex: entry.$1,
-                      project: entry.$2,
-                    ),
-                  ),
-              ],
-            );
-          },
+                return Wrap(
+                  spacing: spacing,
+                  runSpacing: spacing,
+                  children: [
+                    for (final entry in projects.indexed)
+                      SizedBox(
+                        width: cardWidth,
+                        child: _AnimatedProjectCard(
+                          delayIndex: entry.$1,
+                          project: entry.$2,
+                          copy: copy,
+                        ),
+                      ),
+                  ],
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -259,58 +503,56 @@ class _ProjectGrid extends StatelessWidget {
 }
 
 class _AnimatedProjectCard extends StatelessWidget {
-  const _AnimatedProjectCard({required this.delayIndex, required this.project});
+  const _AnimatedProjectCard({
+    required this.delayIndex,
+    required this.project,
+    required this.copy,
+  });
 
   final int delayIndex;
   final ProjectShowcase project;
+  final AppCopy copy;
 
   @override
   Widget build(BuildContext context) {
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0, end: 1),
-      duration: Duration(milliseconds: 520 + (delayIndex * 120)),
+      duration: Duration(milliseconds: 420 + (delayIndex * 90)),
       curve: Curves.easeOutCubic,
       builder: (context, value, child) {
         return Opacity(
           opacity: value,
           child: Transform.translate(
-            offset: Offset(0, 28 * (1 - value)),
+            offset: Offset(0, 18 * (1 - value)),
             child: child,
           ),
         );
       },
-      child: _ProjectCard(project: project),
+      child: _ProjectCard(project: project, copy: copy),
     );
   }
 }
 
 class _ProjectCard extends StatelessWidget {
-  const _ProjectCard({required this.project});
+  const _ProjectCard({required this.project, required this.copy});
 
   final ProjectShowcase project;
+  final AppCopy copy;
 
   @override
   Widget build(BuildContext context) {
+    final colors = _AppleColors.of(context);
+
     return Container(
-      constraints: const BoxConstraints(minHeight: 330),
-      padding: const EdgeInsets.all(24),
+      constraints: const BoxConstraints(minHeight: 286),
+      padding: const EdgeInsets.all(26),
       decoration: BoxDecoration(
+        color: colors.card,
         borderRadius: BorderRadius.circular(30),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            const Color(0xFF1B2330),
-            Color.alphaBlend(
-              project.accent.withValues(alpha: .10),
-              const Color(0xFF151A22),
-            ),
-          ],
-        ),
-        border: Border.all(color: project.accent.withValues(alpha: .32)),
+        border: Border.all(color: colors.border),
         boxShadow: [
           BoxShadow(
-            color: project.accent.withValues(alpha: .10),
+            color: colors.shadow,
             blurRadius: 34,
             offset: const Offset(0, 22),
           ),
@@ -322,26 +564,23 @@ class _ProjectCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 12,
-                height: 12,
+                width: 9,
+                height: 9,
                 decoration: BoxDecoration(
-                  color: project.accent,
+                  color: project.url != null
+                      ? const Color(0xFF34C759)
+                      : colors.secondaryText,
                   shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: project.accent.withValues(alpha: .65),
-                      blurRadius: 16,
-                    ),
-                  ],
                 ),
               ),
               const SizedBox(width: 10),
               Text(
                 project.status,
                 style: TextStyle(
-                  color: project.accent,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: .7,
+                  color: colors.secondaryText,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: .3,
                 ),
               ),
             ],
@@ -349,53 +588,58 @@ class _ProjectCard extends StatelessWidget {
           const SizedBox(height: 26),
           Text(
             project.name,
-            style: const TextStyle(
-              color: Color(0xFFFFF3D2),
+            style: TextStyle(
+              color: colors.primaryText,
               fontSize: 30,
               height: 1,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w800,
               letterSpacing: -1,
             ),
           ),
           const SizedBox(height: 10),
           Text(
             project.category,
-            style: const TextStyle(
-              color: Color(0xFF98A6B9),
+            style: TextStyle(
+              color: colors.secondaryText,
               fontWeight: FontWeight.w700,
             ),
           ),
-          const SizedBox(height: 22),
+          const SizedBox(height: 20),
           Text(
             project.description,
-            style: const TextStyle(
-              color: Color(0xFFD9E0EA),
+            style: TextStyle(
+              color: colors.bodyText,
               fontSize: 16,
               height: 1.55,
+              fontWeight: FontWeight.w500,
             ),
           ),
           const SizedBox(height: 24),
-          SelectableText(
-            project.url,
-            style: const TextStyle(
-              color: Color(0xFF98A6B9),
-              fontSize: 13,
-              height: 1.35,
+          if (project.url != null) ...[
+            SelectableText(
+              project.url!,
+              style: TextStyle(
+                color: colors.secondaryText,
+                fontSize: 13,
+                height: 1.35,
+              ),
             ),
-          ),
-          const SizedBox(height: 18),
+            const SizedBox(height: 18),
+          ],
           SizedBox(
             width: double.infinity,
             child: FilledButton.icon(
-              onPressed: project.isLive ? () => _openUrl(project.url) : null,
-              icon: Icon(project.isLive ? Icons.open_in_new : Icons.lock_clock),
-              label: Text(project.isLive ? 'Open project' : 'Coming soon'),
-              style: FilledButton.styleFrom(
-                backgroundColor: project.accent,
-                foregroundColor: const Color(0xFF11151C),
-                disabledBackgroundColor: const Color(0xFF2A313B),
-                disabledForegroundColor: const Color(0xFF7D8794),
-                padding: const EdgeInsets.symmetric(vertical: 16),
+              onPressed: project.url == null
+                  ? null
+                  : () => _openUrl(project.url!),
+              icon: Icon(
+                project.url == null
+                    ? Icons.schedule_rounded
+                    : Icons.open_in_new_rounded,
+                size: 18,
+              ),
+              label: Text(
+                project.url == null ? copy.comingSoon : copy.openProject,
               ),
             ),
           ),
@@ -406,24 +650,30 @@ class _ProjectCard extends StatelessWidget {
 }
 
 class _Footer extends StatelessWidget {
-  const _Footer();
+  const _Footer({required this.copy});
+
+  final AppCopy copy;
 
   @override
   Widget build(BuildContext context) {
+    final colors = _AppleColors.of(context);
+
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 1180),
+        constraints: const BoxConstraints(maxWidth: 1080),
         child: DecoratedBox(
           decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(color: Colors.white.withValues(alpha: .10)),
-            ),
+            border: Border(top: BorderSide(color: colors.border)),
           ),
-          child: const Padding(
-            padding: EdgeInsets.only(top: 22),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 22),
             child: Text(
-              'Add a new project repo, deploy it with GitHub Pages, then add one more card here.',
-              style: TextStyle(color: Color(0xFF98A6B9), height: 1.5),
+              copy.footer,
+              style: TextStyle(
+                color: colors.secondaryText,
+                fontSize: 14,
+                height: 1.5,
+              ),
             ),
           ),
         ),
@@ -432,91 +682,232 @@ class _Footer extends StatelessWidget {
   }
 }
 
-class _Atmosphere extends StatelessWidget {
-  const _Atmosphere();
+class _PageBackground extends StatelessWidget {
+  const _PageBackground();
 
   @override
   Widget build(BuildContext context) {
+    final colors = _AppleColors.of(context);
+
     return DecoratedBox(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF0F141B), Color(0xFF14202B), Color(0xFF11151C)],
+      decoration: BoxDecoration(
+        color: colors.background,
+        gradient: RadialGradient(
+          center: const Alignment(.7, -1),
+          radius: 1.15,
+          colors: [colors.glow, colors.background],
         ),
       ),
-      child: CustomPaint(painter: _OrbitPainter()),
     );
   }
 }
 
-class _OrbitPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final gridPaint = Paint()
-      ..color = Colors.white.withValues(alpha: .035)
-      ..strokeWidth = 1;
-    const gap = 56.0;
+class _AppleColors {
+  const _AppleColors({
+    required this.background,
+    required this.primaryText,
+    required this.secondaryText,
+    required this.bodyText,
+    required this.card,
+    required this.control,
+    required this.menu,
+    required this.border,
+    required this.shadow,
+    required this.glow,
+  });
 
-    for (var x = 0.0; x < size.width; x += gap) {
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), gridPaint);
-    }
-    for (var y = 0.0; y < size.height; y += gap) {
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
-    }
+  final Color background;
+  final Color primaryText;
+  final Color secondaryText;
+  final Color bodyText;
+  final Color card;
+  final Color control;
+  final Color menu;
+  final Color border;
+  final Color shadow;
+  final Color glow;
 
-    final glowPaint = Paint()
-      ..shader =
-          const RadialGradient(
-            colors: [Color(0x55E3B45B), Color(0x00000000)],
-          ).createShader(
-            Rect.fromCircle(
-              center: Offset(size.width * .82, size.height * .16),
-              radius: size.shortestSide * .36,
-            ),
+  static _AppleColors of(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return isDark
+        ? const _AppleColors(
+            background: Color(0xFF050507),
+            primaryText: Color(0xFFF5F5F7),
+            secondaryText: Color(0xFFB8B8BE),
+            bodyText: Color(0xFFD1D1D6),
+            card: Color(0xFF151518),
+            control: Color(0xFF1D1D20),
+            menu: Color(0xFF242428),
+            border: Color(0xFF2A2A2E),
+            shadow: Color(0x66000000),
+            glow: Color(0x332E6BFF),
+          )
+        : const _AppleColors(
+            background: Color(0xFFF5F5F7),
+            primaryText: Color(0xFF1D1D1F),
+            secondaryText: Color(0xFF6E6E73),
+            bodyText: Color(0xFF424245),
+            card: Color(0xFFFFFFFF),
+            control: Color(0xFFFFFFFF),
+            menu: Color(0xFFFFFFFF),
+            border: Color(0xFFE3E3E8),
+            shadow: Color(0x1A000000),
+            glow: Color(0xFFEAF2FF),
           );
-    canvas.drawCircle(
-      Offset(size.width * .82, size.height * .16),
-      size.shortestSide * .36,
-      glowPaint,
-    );
-
-    final orbitPaint = Paint()
-      ..color = const Color(0x33FFF3D2)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.2;
-    canvas.drawOval(
-      Rect.fromCenter(
-        center: Offset(size.width * .72, size.height * .28),
-        width: size.width * .58,
-        height: size.height * .34,
-      ),
-      orbitPaint,
-    );
   }
+}
 
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+enum AppLanguage {
+  zhHant('中文'),
+  en('English'),
+  ja('日本語');
+
+  const AppLanguage(this.label);
+
+  final String label;
+}
+
+class AppCopy {
+  const AppCopy({
+    required this.siteName,
+    required this.languageLabel,
+    required this.themeToggleLabel,
+    required this.eyebrow,
+    required this.title,
+    required this.subtitle,
+    required this.projectsHeading,
+    required this.openProject,
+    required this.comingSoon,
+    required this.footer,
+    required this.liveStatus,
+    required this.futureStatus,
+    required this.reactionCategory,
+    required this.reactionDescription,
+    required this.futureName,
+    required this.futureCategory,
+    required this.futureDescription,
+  });
+
+  final String siteName;
+  final String languageLabel;
+  final String themeToggleLabel;
+  final String eyebrow;
+  final String title;
+  final String subtitle;
+  final String projectsHeading;
+  final String openProject;
+  final String comingSoon;
+  final String footer;
+  final String liveStatus;
+  final String futureStatus;
+  final String reactionCategory;
+  final String reactionDescription;
+  final String futureName;
+  final String futureCategory;
+  final String futureDescription;
+
+  static AppCopy of(AppLanguage language) {
+    return switch (language) {
+      AppLanguage.zhHant => const AppCopy(
+        siteName: 'awkwardsky.github.io',
+        languageLabel: '語言切換',
+        themeToggleLabel: '切換主題',
+        eyebrow: 'Project homepage',
+        title: 'Awkward Sky Projects',
+        subtitle:
+            '這裡整理我發布在 GitHub Pages 的作品。第一個是 ReactionSpeedLab，之後的新專案也會加在這裡。',
+        projectsHeading: 'Projects',
+        openProject: '開啟專案',
+        comingSoon: '即將加入',
+        footer: '新增專案時，只要部署新的 GitHub Pages，再把卡片加到這個首頁。',
+        liveStatus: '已上線',
+        futureStatus: '規劃中',
+        reactionCategory: '互動網頁工具',
+        reactionDescription: '測試點擊反應速度的小工具，支援多語系、主題切換，以及後續放置廣告版位的空間。',
+        futureName: '更多專案',
+        futureCategory: '專案索引',
+        futureDescription: '新的工具、實驗或作品上線後，會以獨立卡片整理在這裡。',
+      ),
+      AppLanguage.en => const AppCopy(
+        siteName: 'awkwardsky.github.io',
+        languageLabel: 'Language',
+        themeToggleLabel: 'Toggle theme',
+        eyebrow: 'Project homepage',
+        title: 'Awkward Sky Projects',
+        subtitle:
+            'A simple index for projects published on GitHub Pages. The first live project is ReactionSpeedLab, with more projects to come.',
+        projectsHeading: 'Projects',
+        openProject: 'Open project',
+        comingSoon: 'Coming soon',
+        footer:
+            'When a new project is deployed with GitHub Pages, add one more card here.',
+        liveStatus: 'Live',
+        futureStatus: 'Planning',
+        reactionCategory: 'Interactive web tool',
+        reactionDescription:
+            'A reaction speed test for the browser, with multilingual controls, theme switching, and space for future ad placements.',
+        futureName: 'More Projects',
+        futureCategory: 'Project index',
+        futureDescription:
+            'New tools, experiments, and demos will be added here as separate project cards.',
+      ),
+      AppLanguage.ja => const AppCopy(
+        siteName: 'awkwardsky.github.io',
+        languageLabel: '言語切替',
+        themeToggleLabel: 'テーマ切替',
+        eyebrow: 'Project homepage',
+        title: 'Awkward Sky Projects',
+        subtitle:
+            'GitHub Pages で公開しているプロジェクトをまとめるページです。最初の公開プロジェクトは ReactionSpeedLab です。',
+        projectsHeading: 'Projects',
+        openProject: 'プロジェクトを開く',
+        comingSoon: '準備中',
+        footer: '新しい GitHub Pages プロジェクトを公開したら、このページにカードを追加します。',
+        liveStatus: '公開中',
+        futureStatus: '計画中',
+        reactionCategory: 'インタラクティブ Web ツール',
+        reactionDescription: 'ブラウザで反応速度を測定できるツールです。多言語、テーマ切替、今後の広告枠に対応しています。',
+        futureName: 'More Projects',
+        futureCategory: 'プロジェクト一覧',
+        futureDescription: '新しいツール、実験、デモは個別のカードとしてここに追加します。',
+      ),
+    };
+  }
 }
 
 class ProjectShowcase {
   const ProjectShowcase({
     required this.name,
-    required this.url,
     required this.status,
     required this.category,
     required this.description,
-    required this.accent,
-    required this.isLive,
+    this.url,
   });
 
   final String name;
-  final String url;
   final String status;
   final String category;
   final String description;
-  final Color accent;
-  final bool isLive;
+  final String? url;
+
+  static List<ProjectShowcase> localized(AppCopy copy) {
+    return [
+      ProjectShowcase(
+        name: 'ReactionSpeedLab',
+        url: 'https://awkwardsky.github.io/ReactionSpeedLab/',
+        status: copy.liveStatus,
+        category: copy.reactionCategory,
+        description: copy.reactionDescription,
+      ),
+      ProjectShowcase(
+        name: copy.futureName,
+        status: copy.futureStatus,
+        category: copy.futureCategory,
+        description: copy.futureDescription,
+      ),
+    ];
+  }
 }
 
 Future<void> _openUrl(String url) async {
