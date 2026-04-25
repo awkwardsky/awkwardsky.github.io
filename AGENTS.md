@@ -24,5 +24,3 @@ Expected output:
 awkwardsky
 9321793+awkwardsky@users.noreply.github.com
 ```
-
-For the full rule and history-rewrite commands, see `GIT_AUTHOR_RULE.md`.
