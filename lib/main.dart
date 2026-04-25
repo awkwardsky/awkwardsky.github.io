@@ -45,16 +45,6 @@ class HomePage extends StatelessWidget {
       isLive: true,
     ),
     ProjectShowcase(
-      name: 'xxxProject',
-      url: 'https://awkwardsky.github.io/xxxProject/',
-      status: 'Next slot',
-      category: 'Future Project',
-      description:
-          'Reserved for the next standalone GitHub Pages project. Add a repo named xxxProject and this card can become a live link.',
-      accent: Color(0xFF6BD7E3),
-      isLive: false,
-    ),
-    ProjectShowcase(
       name: 'Different Experiments',
       url: 'https://awkwardsky.github.io/',
       status: 'Planning',
@@ -69,40 +59,42 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          const Positioned.fill(child: _Atmosphere()),
-          SafeArea(
-            child: CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 22, 24, 0),
-                    child: _TopBar(onOpenReactionLab: _openReactionLab),
+      body: SelectionArea(
+        child: Stack(
+          children: [
+            const Positioned.fill(child: _Atmosphere()),
+            SafeArea(
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 22, 24, 0),
+                      child: _TopBar(onOpenReactionLab: _openReactionLab),
+                    ),
                   ),
-                ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 72, 24, 36),
-                    child: _HeroSection(projectCount: _projects.length),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 72, 24, 36),
+                      child: _HeroSection(projectCount: _projects.length),
+                    ),
                   ),
-                ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 56),
-                    child: _ProjectGrid(projects: _projects),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 56),
+                      child: _ProjectGrid(projects: _projects),
+                    ),
                   ),
-                ),
-                const SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(24, 0, 24, 32),
-                    child: _Footer(),
+                  const SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(24, 0, 24, 32),
+                      child: _Footer(),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

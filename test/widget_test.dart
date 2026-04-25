@@ -14,6 +14,6 @@ void main() {
 
     expect(find.text('awkwardsky.github.io'), findsOneWidget);
     expect(find.text('ReactionSpeedLab'), findsOneWidget);
-    expect(find.text('xxxProject'), findsOneWidget);
+    expect(find.text('Different Experiments'), findsOneWidget);
   });
 }
