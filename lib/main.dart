@@ -203,7 +203,7 @@ class _HeroSection extends StatelessWidget {
             ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 760),
               child: const Text(
-                'This homepage is the index for independent GitHub Pages projects. Each card can point to a separate repository such as /ReactionSpeedLab/ or a future /xxxProject/.',
+                'This homepage is the index for independent GitHub Pages projects. Each card can point to a separate repository such as /ReactionSpeedLab/ or any future project path.',
                 style: TextStyle(
                   color: Color(0xFFC6D0DF),
                   fontSize: 20,
