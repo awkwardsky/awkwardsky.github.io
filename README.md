@@ -2,9 +2,10 @@
 
 Flutter web homepage for `https://awkwardsky.github.io/`.
 
-This site is the public index for independent GitHub Pages projects, starting with:
+This site is the public index for independent GitHub Pages projects:
 
 - `ReactionSpeedLab`: https://awkwardsky.github.io/ReactionSpeedLab/
+- `DashboardLab`: https://awkwardsky.github.io/DashboardLab/
 
 ## Local Development
 

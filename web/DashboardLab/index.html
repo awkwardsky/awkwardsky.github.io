@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-accent="orange">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DashboardLab — Display Experiments</title>
+
+  <!-- External Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/charts.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+
+<!-- Background ambient glow -->
+<div class="bg-glow" aria-hidden="true"></div>
+
+<!-- Sidebar backdrop (mobile) -->
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+<!-- Command Palette -->
+<div class="cmd-overlay" id="cmdOverlay" role="dialog" aria-label="Command palette">
+  <div class="cmd-box">
+    <input class="cmd-input" id="cmdInput" type="text" placeholder="Type a command..." autocomplete="off" aria-label="Search commands">
+    <div class="cmd-list" id="cmdList" role="listbox"></div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true">
+  <div class="modal">
+    <h2 id="modalTitle">Export Dataset</h2>
+    <p id="modalBody">Your DashboardLab export is ready. Choose a format to download the complete demo dataset, charts, and metrics.</p>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="closeModal(); showToast('Dataset exported successfully', 'green')">Export CSV</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     Sidebar
+     ============================================================ -->
+<aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+  <div class="sidebar-logo">
+    <div class="logo-icon">D</div>
+    <span>DashboardLab</span>
+    <span class="version">v0.1</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <a href="#hero" class="nav-item active" data-section="hero">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Overview
+      <span class="nav-kbd">D</span>
+    </a>
+    <a href="#kpi-section" class="nav-item" data-section="kpi-section">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      KPI Metrics
+    </a>
+    <div class="nav-section-label">Visualizations</div>
+    <a href="#charts-section" class="nav-item" data-section="charts-section">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Charts
+    </a>
+    <a href="#region-section" class="nav-item" data-section="region-section">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      Regions
+    </a>
+    <a href="#table-section" class="nav-item" data-section="table-section">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+      Data Table
+    </a>
+    <div class="nav-section-label">Operations</div>
+    <a href="#timeline-section" class="nav-item" data-section="timeline-section">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Activity
+    </a>
+    <a href="#status-section" class="nav-item" data-section="status-section">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      System Status
+    </a>
+    <a href="#alerts-section" class="nav-item" data-section="alerts-section">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Alerts
+      <span class="nav-badge">3</span>
+    </a>
+    <a href="#release-section" class="nav-item" data-section="release-section">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+      Releases
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="avatar">H</div>
+    <div class="user-info">
+      <div class="user-name">Haru</div>
+      <div class="user-role"><span class="role-tag">Admin</span></div>
+    </div>
+  </div>
+</aside>
+
+<!-- ============================================================
+     Top Bar
+     ============================================================ -->
+<header class="topbar" role="banner">
+  <button class="topbar-btn mobile-menu-btn" onclick="toggleSidebar()" aria-label="Toggle menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <div class="topbar-breadcrumb">
+    <span>DashboardLab</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="9 18 15 12 9 6"/></svg>
+    <span class="current">Overview</span>
+  </div>
+  <div class="topbar-search" onclick="openCmd()" role="button" tabindex="0" aria-label="Open command palette">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <span>Search...</span>
+    <kbd>&#8984;K</kbd>
+  </div>
+  <div class="topbar-actions">
+    <button class="topbar-btn" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle light/dark mode">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+    <button class="topbar-btn" onclick="refreshData()" aria-label="Refresh data" title="Refresh data">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    </button>
+    <button class="topbar-btn" onclick="openModal('Notifications', getNotificationsHTML())" aria-label="Notifications" title="Notifications">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="dot"></span>
+    </button>
+    <button class="topbar-btn" onclick="openModal('Export Dataset', 'Choose a format to download the complete demo dataset.', true)" aria-label="Export" title="Export dataset">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    </button>
+    <div class="accent-picker" aria-label="Accent color">
+      <div class="accent-dot active" data-c="orange" title="Orange" onclick="setAccent('orange')"></div>
+      <div class="accent-dot" data-c="blue" title="Blue" onclick="setAccent('blue')"></div>
+      <div class="accent-dot" data-c="green" title="Green" onclick="setAccent('green')"></div>
+      <div class="accent-dot" data-c="purple" title="Purple" onclick="setAccent('purple')"></div>
+      <div class="accent-dot" data-c="rose" title="Rose" onclick="setAccent('rose')"></div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================
+     Main Content
+     ============================================================ -->
+<main class="main">
+<div class="content">
+
+  <!-- Hero -->
+  <section class="hero section" id="hero">
+    <div class="hero-top">
+      <div>
+        <h1>DashboardLab</h1>
+        <p>Explore app-style metrics through charts, KPI cards, tables, timelines, and status views. Last synced 2 min ago.</p>
+      </div>
+      <div class="hero-actions">
+        <div class="filters">
+          <div class="filter-group" id="dateFilter" role="radiogroup" aria-label="Date range">
+            <button class="filter-btn" data-range="1d">24h</button>
+            <button class="filter-btn active" data-range="7d">7d</button>
+            <button class="filter-btn" data-range="30d">30d</button>
+            <button class="filter-btn" data-range="90d">90d</button>
+          </div>
+          <div class="filter-group" id="platformFilter" role="radiogroup" aria-label="Platform">
+            <button class="filter-btn active" data-platform="all">All</button>
+            <button class="filter-btn" data-platform="ios">iOS</button>
+            <button class="filter-btn" data-platform="android">Android</button>
+          </div>
+          <select class="filter-select" id="regionFilter" aria-label="Region filter">
+            <option value="all">All Regions</option>
+            <option value="na">North America</option>
+            <option value="eu">Europe</option>
+            <option value="apac">Asia Pacific</option>
+            <option value="latam">Latin America</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KPI Cards -->
+  <section class="section" id="kpi-section" style="margin-bottom:28px">
+    <div class="kpi-grid" id="kpiGrid"></div>
+  </section>
+
+  <!-- Charts with Tabs -->
+  <section class="section" id="charts-section" style="margin-bottom:28px">
+    <div class="section-header">
+      <div class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Visualization Lab
+      </div>
+      <button class="collapsible-toggle open" onclick="toggleCollapse(this, 'chartsBody')">
+        <span>Collapse</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab-btn active" data-tab="tab-overview" role="tab">Overview</button>
+      <button class="tab-btn" data-tab="tab-revenue" role="tab">Revenue</button>
+      <button class="tab-btn" data-tab="tab-engagement" role="tab">Engagement</button>
+      <button class="tab-btn" data-tab="tab-performance" role="tab">Performance</button>
+    </div>
+    <div id="chartsBody" class="collapsible-body">
+      <!-- Overview Tab -->
+      <div class="tab-content active" id="tab-overview">
+        <div class="chart-grid">
+          <div class="chart-panel gradient-border"><div class="chart-panel-header"><span class="chart-panel-title">Active Users</span><span class="chart-panel-tag">Line</span></div><div class="chart-wrap"><canvas id="c_active"></canvas></div></div>
+          <div class="chart-panel gradient-border"><div class="chart-panel-header"><span class="chart-panel-title">New Users</span><span class="chart-panel-tag">Stacked Bar</span></div><div class="chart-wrap"><canvas id="c_new"></canvas></div></div>
+        </div>
+        <div class="chart-grid" style="margin-top:14px">
+          <div class="chart-panel gradient-border"><div class="chart-panel-header"><span class="chart-panel-title">Platform Split</span><span class="chart-panel-tag">Doughnut</span></div><div class="chart-wrap"><canvas id="c_platform"></canvas></div></div>
+          <div class="chart-panel gradient-border"><div class="chart-panel-header"><span class="chart-panel-title">Retention D1 vs D7</span><span class="chart-panel-tag">Area</span></div><div class="chart-wrap"><canvas id="c_retention"></canvas></div></div>
+        </div>
+      </div>
+      <!-- Revenue Tab -->
+      <div class="tab-content" id="tab-revenue">
+        <div class="chart-grid">
+          <div class="chart-panel gradient-border"><div class="chart-panel-header"><span class="chart-panel-title">Revenue Trend</span><span class="chart-panel-tag">Stepped Line</span></div><div class="chart-wrap"><canvas id="c_revenue"></canvas></div></div>
+          <div class="chart-panel gradient-border"><div class="chart-panel-header"><span class="chart-panel-title">ARPU vs ARPPU</span><span class="chart-panel-tag">Multi-axis</span></div><div class="chart-wrap"><canvas id="c_arpu"></canvas></div></div>
+        </div>
+        <div class="chart-grid" style="margin-top:14px">
+          <div class="chart-panel gradient-border"><div class="chart-panel-header"><span class="chart-panel-title">Paying Users</span><span class="chart-panel-tag">Area</span></div><div class="chart-wrap"><canvas id="c_paying"></canvas></div></div>
+          <div class="chart-panel gradient-border"><div class="chart-panel-header"><span class="chart-panel-title">Revenue by Region</span><span class="chart-panel-tag">Horizontal Bar</span></div><div class="chart-wrap"><canvas id="c_revRegion"></canvas></div></div>
+        </div>
+      </div>
+      <!-- Engagement Tab -->
+      <div class="tab-content" id="tab-engagement">
+        <div class="chart-grid">
+          <div class="chart-panel gradient-border"><div class="chart-panel-header"><span class="chart-panel-title">Avg Session Duration</span><span class="chart-panel-tag">Radar</span></div><div class="chart-wrap tall"><canvas id="c_session"></canvas></div></div>
+          <div class="chart-panel gradient-border"><div class="chart-panel-header"><span class="chart-panel-title">Retention Funnel</span><span class="chart-panel-tag">Funnel Bar</span></div><div class="chart-wrap tall"><canvas id="c_funnel"></canvas></div></div>
+        </div>
+      </div>
+      <!-- Performance Tab -->
+      <div class="tab-content" id="tab-performance">
+        <div class="chart-grid">
+          <div class="chart-panel gradient-border"><div class="chart-panel-header"><span class="chart-panel-title">Crash Rate</span><span class="chart-panel-tag">Scatter + Line</span></div><div class="chart-wrap"><canvas id="c_crash"></canvas></div></div>
+          <div class="chart-panel gradient-border"><div class="chart-panel-header"><span class="chart-panel-title">API Success Rate</span><span class="chart-panel-tag">Gauge Doughnut</span></div><div class="chart-wrap"><canvas id="c_api"></canvas></div></div>
+        </div>
+        <div class="chart-grid" style="margin-top:14px">
+          <div class="chart-panel gradient-border"><div class="chart-panel-header"><span class="chart-panel-title">Avg FPS</span><span class="chart-panel-tag">Polar Area</span></div><div class="chart-wrap"><canvas id="c_fps"></canvas></div></div>
+          <div class="chart-panel gradient-border"><div class="chart-panel-header"><span class="chart-panel-title">Latency Percentiles</span><span class="chart-panel-tag">Mixed</span></div><div class="chart-wrap"><canvas id="c_latency"></canvas></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Regions -->
+  <section class="section" id="region-section" style="margin-bottom:28px">
+    <div class="section-header">
+      <div class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Regional Performance
+      </div>
+    </div>
+    <div class="region-grid" id="regionGrid"></div>
+  </section>
+
+  <!-- Data Table -->
+  <section class="section" id="table-section" style="margin-bottom:28px">
+    <div class="section-header">
+      <div class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+        Detailed Metrics
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn" onclick="openModal('Export Dataset', 'Choose a format to download the complete demo dataset.', true)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export
+        </button>
+      </div>
+    </div>
+    <div class="chart-panel" style="padding:18px">
+      <div class="table-controls">
+        <input class="table-search" id="tableSearch" type="text" placeholder="Search metrics..." aria-label="Search table">
+      </div>
+      <div style="overflow-x:auto">
+        <table class="data-table" id="dataTable">
+          <thead><tr id="tableHead"></tr></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section class="section" id="timeline-section" style="margin-bottom:28px">
+    <div class="section-header">
+      <div class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Recent Activity
+      </div>
+    </div>
+    <div class="chart-grid">
+      <div class="chart-panel" style="padding:22px">
+        <div class="timeline" id="activityTimeline"></div>
+      </div>
+      <div class="chart-panel" style="padding:22px">
+        <div class="chart-panel-header"><span class="chart-panel-title">Team Activity Heatmap</span><span class="chart-panel-tag">Bar</span></div>
+        <div class="chart-wrap"><canvas id="c_team"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- System Status -->
+  <section class="section" id="status-section" style="margin-bottom:28px">
+    <div class="section-header">
+      <div class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        System Status
+      </div>
+    </div>
+    <div class="status-grid" id="statusGrid"></div>
+  </section>
+
+  <!-- Alerts -->
+  <section class="section" id="alerts-section" style="margin-bottom:28px">
+    <div class="section-header">
+      <div class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Active Alerts
+      </div>
+    </div>
+    <div id="alertsList"></div>
+  </section>
+
+  <!-- Releases -->
+  <section class="section" id="release-section" style="margin-bottom:60px">
+    <div class="section-header">
+      <div class="section-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+        Release Notes
+      </div>
+    </div>
+    <div id="releaseList"></div>
+  </section>
+
+</div>
+</main>
+
+<!-- Scripts (order matters: data → charts → components → ui → app) -->
+<script src="js/data.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/components.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

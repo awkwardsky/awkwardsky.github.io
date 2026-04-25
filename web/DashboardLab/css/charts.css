@@ -1,0 +1,31 @@
+/* ============================================================
+   Chart Panels
+   ============================================================ */
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.chart-grid.tri { grid-template-columns: 1fr 1fr 1fr; }
+
+.chart-panel {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px; position: relative;
+  transition: var(--transition);
+}
+.chart-panel:hover { border-color: var(--border-hover); }
+
+.chart-panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.chart-panel-title { font-size: 13px; font-weight: 600; }
+.chart-panel-tag {
+  font-size: 9px; background: rgba(255,255,255,0.05); color: var(--text-muted);
+  padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.chart-panel .chart-wrap { position: relative; width: 100%; height: 220px; overflow: hidden; }
+.chart-panel .chart-wrap canvas {
+  position: absolute; top: 0; left: 0;
+  width: 100% !important; height: 100% !important; max-height: 220px;
+}
+.chart-panel .chart-wrap.tall { height: 260px; }
+.chart-panel .chart-wrap.tall canvas { max-height: 260px; }
