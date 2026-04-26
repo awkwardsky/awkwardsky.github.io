@@ -2,10 +2,13 @@
 
 Flutter web homepage for `https://awkwardsky.github.io/`.
 
-This site is the public index for independent GitHub Pages projects, including:
+This site is the public index for independent GitHub Pages projects and selected
+private-project showcases, including:
 
 - `ReactionSpeedLab`: https://awkwardsky.github.io/ReactionSpeedLab/
 - `DashboardLab`: https://awkwardsky.github.io/DashboardLab/
+- `Kagerune Color`: video showcase only; source code and playable builds are
+  private.
 
 ## Local Development
 

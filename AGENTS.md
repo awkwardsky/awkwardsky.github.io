@@ -24,3 +24,8 @@ Expected output:
 awkwardsky
 9321793+awkwardsky@users.noreply.github.com
 ```
+
+## Private Source Handling
+
+Do not copy source code from private local projects into this repository. For
+`kagerune-color`, only public showcase media under `web/showcases/` may be used.

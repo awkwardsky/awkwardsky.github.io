@@ -615,9 +615,9 @@ class _ProjectCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
-          if (project.url != null) ...[
+          if (project.displayUrl != null) ...[
             SelectableText(
-              project.url!,
+              project.displayUrl!,
               style: TextStyle(
                 color: colors.secondaryText,
                 fontSize: 13,
@@ -635,11 +635,13 @@ class _ProjectCard extends StatelessWidget {
               icon: Icon(
                 project.url == null
                     ? Icons.schedule_rounded
-                    : Icons.open_in_new_rounded,
+                    : project.actionIcon,
                 size: 18,
               ),
               label: Text(
-                project.url == null ? copy.comingSoon : copy.openProject,
+                project.url == null
+                    ? copy.comingSoon
+                    : project.actionLabel ?? copy.openProject,
               ),
             ),
           ),
@@ -778,14 +780,18 @@ class AppCopy {
     required this.subtitle,
     required this.projectsHeading,
     required this.openProject,
+    required this.watchShowcase,
     required this.comingSoon,
     required this.footer,
     required this.liveStatus,
+    required this.showcaseStatus,
     required this.futureStatus,
     required this.reactionCategory,
     required this.reactionDescription,
     required this.dashboardCategory,
     required this.dashboardDescription,
+    required this.kageruneCategory,
+    required this.kageruneDescription,
     required this.futureName,
     required this.futureCategory,
     required this.futureDescription,
@@ -799,14 +805,18 @@ class AppCopy {
   final String subtitle;
   final String projectsHeading;
   final String openProject;
+  final String watchShowcase;
   final String comingSoon;
   final String footer;
   final String liveStatus;
+  final String showcaseStatus;
   final String futureStatus;
   final String reactionCategory;
   final String reactionDescription;
   final String dashboardCategory;
   final String dashboardDescription;
+  final String kageruneCategory;
+  final String kageruneDescription;
   final String futureName;
   final String futureCategory;
   final String futureDescription;
@@ -819,18 +829,22 @@ class AppCopy {
         themeToggleLabel: '切換主題',
         eyebrow: 'Project homepage',
         title: 'Awkward Sky Projects',
-        subtitle:
-            '這裡整理我發布在 GitHub Pages 的作品。第一個是 ReactionSpeedLab，之後的新專案也會加在這裡。',
+        subtitle: '這裡整理我發布在 GitHub Pages 的作品，也收錄不公開原始碼的影片展示。',
         projectsHeading: 'Projects',
         openProject: '開啟專案',
+        watchShowcase: '觀看影片',
         comingSoon: '即將加入',
-        footer: '新增專案時，只要部署新的 GitHub Pages，再把卡片加到這個首頁。',
+        footer: '公開工具會連到 GitHub Pages；私人專案只放展示影片或截圖，不公開原始碼。',
         liveStatus: '已上線',
+        showcaseStatus: '展示影片',
         futureStatus: '規劃中',
         reactionCategory: '互動網頁工具',
         reactionDescription: '測試點擊反應速度的小工具，支援多語系、主題切換，以及後續放置廣告版位的空間。',
         dashboardCategory: '資料儀表板',
         dashboardDescription: '展示資料卡片、趨勢圖與營運指標的前端儀表板實驗，用來整理互動式 dashboard 介面。',
+        kageruneCategory: '私人 Flutter 遊戲',
+        kageruneDescription:
+            '以戰鬥演出與操作手感為主的 Flutter 遊戲專案。此處只提供錄製展示，原始碼與完整可玩版本維持 private。',
         futureName: '更多專案',
         futureCategory: '專案索引',
         futureDescription: '新的工具、實驗或作品上線後，會以獨立卡片整理在這裡。',
@@ -842,13 +856,15 @@ class AppCopy {
         eyebrow: 'Project homepage',
         title: 'Awkward Sky Projects',
         subtitle:
-            'A simple index for projects published on GitHub Pages. The first live project is ReactionSpeedLab, with more projects to come.',
+            'A simple index for public GitHub Pages projects and video showcases for private work.',
         projectsHeading: 'Projects',
         openProject: 'Open project',
+        watchShowcase: 'Watch video',
         comingSoon: 'Coming soon',
         footer:
-            'When a new project is deployed with GitHub Pages, add one more card here.',
+            'Public tools link to GitHub Pages. Private projects use video or screenshots without publishing source code.',
         liveStatus: 'Live',
+        showcaseStatus: 'Video showcase',
         futureStatus: 'Planning',
         reactionCategory: 'Interactive web tool',
         reactionDescription:
@@ -856,6 +872,9 @@ class AppCopy {
         dashboardCategory: 'Data dashboard',
         dashboardDescription:
             'A front-end dashboard experiment for data cards, trend charts, and operational metrics.',
+        kageruneCategory: 'Private Flutter game',
+        kageruneDescription:
+            'A Flutter game project focused on combat presentation and game feel. This page provides a recorded showcase only; source code and the full playable build stay private.',
         futureName: 'More Projects',
         futureCategory: 'Project index',
         futureDescription:
@@ -867,19 +886,23 @@ class AppCopy {
         themeToggleLabel: 'テーマ切替',
         eyebrow: 'Project homepage',
         title: 'Awkward Sky Projects',
-        subtitle:
-            'GitHub Pages で公開しているプロジェクトをまとめるページです。最初の公開プロジェクトは ReactionSpeedLab です。',
+        subtitle: 'GitHub Pages の公開プロジェクトと、非公開プロジェクトの動画展示をまとめるページです。',
         projectsHeading: 'Projects',
         openProject: 'プロジェクトを開く',
+        watchShowcase: '動画を見る',
         comingSoon: '準備中',
-        footer: '新しい GitHub Pages プロジェクトを公開したら、このページにカードを追加します。',
+        footer: '公開ツールは GitHub Pages にリンクし、非公開プロジェクトは動画やスクリーンショットのみ掲載します。',
         liveStatus: '公開中',
+        showcaseStatus: '動画展示',
         futureStatus: '計画中',
         reactionCategory: 'インタラクティブ Web ツール',
         reactionDescription: 'ブラウザで反応速度を測定できるツールです。多言語、テーマ切替、今後の広告枠に対応しています。',
         dashboardCategory: 'データダッシュボード',
         dashboardDescription:
             'データカード、トレンドチャート、運用指標を表示するフロントエンド dashboard 実験です。',
+        kageruneCategory: '非公開 Flutter ゲーム',
+        kageruneDescription:
+            '戦闘演出と操作感に重点を置いた Flutter ゲームプロジェクトです。ここでは録画展示のみを公開し、ソースコードと完全版は private のままにします。',
         futureName: 'More Projects',
         futureCategory: 'プロジェクト一覧',
         futureDescription: '新しいツール、実験、デモは個別のカードとしてここに追加します。',
@@ -895,6 +918,9 @@ class ProjectShowcase {
     required this.category,
     required this.description,
     this.url,
+    this.displayUrl,
+    this.actionLabel,
+    this.actionIcon = Icons.open_in_new_rounded,
   });
 
   final String name;
@@ -902,12 +928,16 @@ class ProjectShowcase {
   final String category;
   final String description;
   final String? url;
+  final String? displayUrl;
+  final String? actionLabel;
+  final IconData actionIcon;
 
   static List<ProjectShowcase> localized(AppCopy copy) {
     return [
       ProjectShowcase(
         name: 'ReactionSpeedLab',
         url: 'https://awkwardsky.github.io/ReactionSpeedLab/',
+        displayUrl: 'https://awkwardsky.github.io/ReactionSpeedLab/',
         status: copy.liveStatus,
         category: copy.reactionCategory,
         description: copy.reactionDescription,
@@ -915,9 +945,19 @@ class ProjectShowcase {
       ProjectShowcase(
         name: 'DashboardLab',
         url: 'https://awkwardsky.github.io/DashboardLab/',
+        displayUrl: 'https://awkwardsky.github.io/DashboardLab/',
         status: copy.liveStatus,
         category: copy.dashboardCategory,
         description: copy.dashboardDescription,
+      ),
+      ProjectShowcase(
+        name: 'Kagerune Color',
+        url: 'showcases/kagerune_combat_showcase_1080p.mp4',
+        actionLabel: copy.watchShowcase,
+        actionIcon: Icons.play_circle_fill_rounded,
+        status: copy.showcaseStatus,
+        category: copy.kageruneCategory,
+        description: copy.kageruneDescription,
       ),
       ProjectShowcase(
         name: copy.futureName,
@@ -930,7 +970,7 @@ class ProjectShowcase {
 }
 
 Future<void> _openUrl(String url) async {
-  final uri = Uri.parse(url);
+  final uri = Uri.base.resolve(url);
   final opened = await launchUrl(uri, webOnlyWindowName: '_blank');
   if (!opened) {
     throw StateError('Could not open $url');
