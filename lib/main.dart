@@ -1228,12 +1228,12 @@ class AppCopy {
         reactionDescription: '測試點擊反應速度的小工具，支援多語系、主題切換，以及後續放置廣告版位的空間。',
         dashboardCategory: '資料儀表板',
         dashboardDescription: '展示資料卡片、趨勢圖與營運指標的前端儀表板實驗，用來整理互動式 dashboard 介面。',
-        kageruneCategory: '私人 Flutter 遊戲',
+        kageruneCategory: '彈幕推進戰鬥',
         kageruneDescription:
-            '以戰鬥演出與操作手感為主的 Flutter 遊戲專案。此處只提供錄製展示，原始碼與完整可玩版本維持 private。',
-        tamatamaCategory: '私人 Flutter 遊戲',
+            '操控角色在關卡中推進，閃避彈幕並用連射、擊退與爆裂攻擊清除敵群。此處只提供錄製展示，原始碼與完整可玩版本維持 private。',
+        tamatamaCategory: '回合制砲擊對戰',
         tamatamaDescription:
-            '以角色互動與遊戲流程展示為主的 Flutter 遊戲專案。此處只提供錄製展示，原始碼與完整可玩版本維持 private。',
+            '輪流控制小型戰車，依地形、風向與角度調整砲擊軌跡，在限時回合中命中對手。此處只提供錄製展示，原始碼與完整可玩版本維持 private。',
         futureName: '更多專案',
         futureCategory: '專案索引',
         futureDescription: '新的工具、實驗或作品上線後，會以獨立卡片整理在這裡。',
@@ -1261,12 +1261,12 @@ class AppCopy {
         dashboardCategory: 'Data dashboard',
         dashboardDescription:
             'A front-end dashboard experiment for data cards, trend charts, and operational metrics.',
-        kageruneCategory: 'Private Flutter game',
+        kageruneCategory: 'Bullet-hell combat',
         kageruneDescription:
-            'A Flutter game project focused on combat presentation and game feel. This page provides a recorded showcase only; source code and the full playable build stay private.',
-        tamatamaCategory: 'Private Flutter game',
+            'Control a character through combat stages, dodge bullet patterns, and clear enemy waves with rapid fire, knockback, and burst attacks. This page provides a recorded showcase only; source code and the full playable build stay private.',
+        tamatamaCategory: 'Turn-based artillery duel',
         tamatamaDescription:
-            'A Flutter game project focused on character interaction and gameplay flow. This page provides a recorded showcase only; source code and the full playable build stay private.',
+            'Take turns commanding small tanks, adjusting shot angle around terrain and wind to land hits before the timer runs out. This page provides a recorded showcase only; source code and the full playable build stay private.',
         futureName: 'More Projects',
         futureCategory: 'Project index',
         futureDescription:
@@ -1292,12 +1292,12 @@ class AppCopy {
         dashboardCategory: 'データダッシュボード',
         dashboardDescription:
             'データカード、トレンドチャート、運用指標を表示するフロントエンド dashboard 実験です。',
-        kageruneCategory: '非公開 Flutter ゲーム',
+        kageruneCategory: '弾幕進行バトル',
         kageruneDescription:
-            '戦闘演出と操作感に重点を置いた Flutter ゲームプロジェクトです。ここでは録画展示のみを公開し、ソースコードと完全版は private のままにします。',
-        tamatamaCategory: '非公開 Flutter ゲーム',
+            'キャラクターを操作してステージを進み、弾幕を避けながら連射、ノックバック、爆発攻撃で敵を倒します。ここでは録画展示のみを公開し、ソースコードと完全版は private のままにします。',
+        tamatamaCategory: 'ターン制砲撃バトル',
         tamatamaDescription:
-            'キャラクターのインタラクションとゲーム進行を中心にした Flutter ゲームプロジェクトです。ここでは録画展示のみを公開し、ソースコードと完全版は private のままにします。',
+            '小型戦車を交互に操作し、地形、風向き、角度を読んで砲撃の軌道を調整し、制限時間内に相手を狙います。ここでは録画展示のみを公開し、ソースコードと完全版は private のままにします。',
         futureName: 'More Projects',
         futureCategory: 'プロジェクト一覧',
         futureDescription: '新しいツール、実験、デモは個別のカードとしてここに追加します。',
