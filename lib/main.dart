@@ -42,32 +42,37 @@ class _AwkwardSkyHomeAppState extends State<AwkwardSkyHomeApp> {
 
 ThemeData _buildTheme(Brightness brightness) {
   final isDark = brightness == Brightness.dark;
-  final colorScheme = ColorScheme.fromSeed(
-    seedColor: const Color(0xFF007AFF),
-    brightness: brightness,
-  );
+  const brandCyan = Color(0xFF00FFFF);
+  final colorScheme =
+      ColorScheme.fromSeed(
+        seedColor: brandCyan,
+        brightness: brightness,
+      ).copyWith(
+        primary: isDark ? brandCyan : const Color(0xFF007C89),
+        surfaceTint: brandCyan,
+      );
 
   return ThemeData(
     useMaterial3: true,
     brightness: brightness,
     colorScheme: colorScheme,
     scaffoldBackgroundColor: isDark
-        ? const Color(0xFF050507)
-        : const Color(0xFFF5F5F7),
+        ? const Color(0xFF020B0E)
+        : const Color(0xFFF4FBFC),
     textTheme: Typography.material2021().black.apply(
-      bodyColor: isDark ? const Color(0xFFF5F5F7) : const Color(0xFF1D1D1F),
-      displayColor: isDark ? const Color(0xFFFFFFFF) : const Color(0xFF1D1D1F),
+      bodyColor: isDark ? const Color(0xFFE9FEFF) : const Color(0xFF162124),
+      displayColor: isDark ? const Color(0xFFF7FFFF) : const Color(0xFF162124),
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
-        backgroundColor: const Color(0xFF007AFF),
-        foregroundColor: Colors.white,
+        backgroundColor: isDark ? brandCyan : const Color(0xFF007C89),
+        foregroundColor: isDark ? const Color(0xFF001619) : Colors.white,
         disabledBackgroundColor: isDark
-            ? const Color(0xFF2A2A2E)
-            : const Color(0xFFE5E5EA),
+            ? const Color(0xFF102125)
+            : const Color(0xFFDCEDEF),
         disabledForegroundColor: isDark
-            ? const Color(0xFF8E8E93)
-            : const Color(0xFF6E6E73),
+            ? const Color(0xFF678287)
+            : const Color(0xFF64787C),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         shape: const StadiumBorder(),
       ),
@@ -179,12 +184,19 @@ class _TopBar extends StatelessWidget {
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(
-                      color: colors.primaryText,
-                      borderRadius: BorderRadius.circular(12),
+                      color: colors.accent,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: colors.accentGlow,
+                          blurRadius: 22,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
                     ),
                     child: Icon(
                       Icons.auto_awesome_rounded,
-                      color: colors.background,
+                      color: colors.accentText,
                       size: 19,
                     ),
                   ),
@@ -197,7 +209,7 @@ class _TopBar extends StatelessWidget {
                         color: colors.primaryText,
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
-                        letterSpacing: -.2,
+                        letterSpacing: 0,
                       ),
                     ),
                   ),
@@ -288,14 +300,14 @@ class _ThemeIconButton extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   color: colors.shadow,
-                  blurRadius: 24,
-                  offset: const Offset(0, 12),
+                  blurRadius: 18,
+                  offset: const Offset(0, 10),
                 ),
               ],
             ),
             child: Icon(
               isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
-              color: colors.primaryText,
+              color: colors.accent,
               size: 21,
             ),
           ),
@@ -343,13 +355,13 @@ class _LanguageSelect extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
               color: colors.control,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(8),
               border: Border.all(color: colors.border),
               boxShadow: [
                 BoxShadow(
                   color: colors.shadow,
-                  blurRadius: 24,
-                  offset: const Offset(0, 12),
+                  blurRadius: 18,
+                  offset: const Offset(0, 10),
                 ),
               ],
             ),
@@ -358,11 +370,8 @@ class _LanguageSelect extends StatelessWidget {
                 value: value,
                 isExpanded: true,
                 dropdownColor: colors.menu,
-                borderRadius: BorderRadius.circular(16),
-                icon: Icon(
-                  Icons.expand_more_rounded,
-                  color: colors.primaryText,
-                ),
+                borderRadius: BorderRadius.circular(8),
+                icon: Icon(Icons.expand_more_rounded, color: colors.accent),
                 style: TextStyle(
                   color: colors.primaryText,
                   fontSize: 15,
@@ -401,43 +410,49 @@ class _HeroSection extends StatelessWidget {
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 1080),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              copy.eyebrow,
-              style: TextStyle(
-                color: colors.secondaryText,
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-                letterSpacing: .2,
-              ),
-            ),
-            const SizedBox(height: 18),
-            Text(
-              copy.title,
-              style: TextStyle(
-                color: colors.primaryText,
-                fontSize: 76,
-                height: .95,
-                fontWeight: FontWeight.w800,
-                letterSpacing: -3.8,
-              ),
-            ),
-            const SizedBox(height: 24),
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 700),
-              child: Text(
-                copy.subtitle,
-                style: TextStyle(
-                  color: colors.secondaryText,
-                  fontSize: 21,
-                  height: 1.5,
-                  fontWeight: FontWeight.w500,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final isNarrow = constraints.maxWidth < 520;
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  copy.eyebrow,
+                  style: TextStyle(
+                    color: colors.accent,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: .2,
+                  ),
                 ),
-              ),
-            ),
-          ],
+                const SizedBox(height: 18),
+                Text(
+                  copy.title,
+                  style: TextStyle(
+                    color: colors.primaryText,
+                    fontSize: isNarrow ? 56 : 76,
+                    height: isNarrow ? 1.04 : .95,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 700),
+                  child: Text(
+                    copy.subtitle,
+                    style: TextStyle(
+                      color: colors.secondaryText,
+                      fontSize: isNarrow ? 18 : 21,
+                      height: 1.5,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -463,10 +478,10 @@ class _ProjectGrid extends StatelessWidget {
             Text(
               copy.projectsHeading,
               style: TextStyle(
-                color: colors.primaryText,
+                color: colors.accent,
                 fontSize: 24,
                 fontWeight: FontWeight.w800,
-                letterSpacing: -.7,
+                letterSpacing: 0,
               ),
             ),
             const SizedBox(height: 18),
@@ -548,13 +563,13 @@ class _ProjectCard extends StatelessWidget {
       padding: const EdgeInsets.all(26),
       decoration: BoxDecoration(
         color: colors.card,
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: colors.border),
         boxShadow: [
           BoxShadow(
             color: colors.shadow,
-            blurRadius: 34,
-            offset: const Offset(0, 22),
+            blurRadius: 26,
+            offset: const Offset(0, 18),
           ),
         ],
       ),
@@ -567,9 +582,7 @@ class _ProjectCard extends StatelessWidget {
                 width: 9,
                 height: 9,
                 decoration: BoxDecoration(
-                  color: project.url != null
-                      ? const Color(0xFF34C759)
-                      : colors.secondaryText,
+                  color: project.url != null ? colors.accent : colors.muted,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -577,7 +590,7 @@ class _ProjectCard extends StatelessWidget {
               Text(
                 project.status,
                 style: TextStyle(
-                  color: colors.secondaryText,
+                  color: project.url != null ? colors.accent : colors.muted,
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                   letterSpacing: .3,
@@ -593,16 +606,13 @@ class _ProjectCard extends StatelessWidget {
               fontSize: 30,
               height: 1,
               fontWeight: FontWeight.w800,
-              letterSpacing: -1,
+              letterSpacing: 0,
             ),
           ),
           const SizedBox(height: 10),
           Text(
             project.category,
-            style: TextStyle(
-              color: colors.secondaryText,
-              fontWeight: FontWeight.w700,
-            ),
+            style: TextStyle(color: colors.accent, fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 20),
           Text(
@@ -697,7 +707,8 @@ class _PageBackground extends StatelessWidget {
         gradient: RadialGradient(
           center: const Alignment(.7, -1),
           radius: 1.15,
-          colors: [colors.glow, colors.background],
+          colors: [colors.glow, colors.background, colors.background],
+          stops: const [0, .58, 1],
         ),
       ),
     );
@@ -707,9 +718,13 @@ class _PageBackground extends StatelessWidget {
 class _AppleColors {
   const _AppleColors({
     required this.background,
+    required this.accent,
+    required this.accentText,
+    required this.accentGlow,
     required this.primaryText,
     required this.secondaryText,
     required this.bodyText,
+    required this.muted,
     required this.card,
     required this.control,
     required this.menu,
@@ -719,9 +734,13 @@ class _AppleColors {
   });
 
   final Color background;
+  final Color accent;
+  final Color accentText;
+  final Color accentGlow;
   final Color primaryText;
   final Color secondaryText;
   final Color bodyText;
+  final Color muted;
   final Color card;
   final Color control;
   final Color menu;
@@ -734,28 +753,36 @@ class _AppleColors {
 
     return isDark
         ? const _AppleColors(
-            background: Color(0xFF050507),
-            primaryText: Color(0xFFF5F5F7),
-            secondaryText: Color(0xFFB8B8BE),
-            bodyText: Color(0xFFD1D1D6),
-            card: Color(0xFF151518),
-            control: Color(0xFF1D1D20),
-            menu: Color(0xFF242428),
-            border: Color(0xFF2A2A2E),
-            shadow: Color(0x66000000),
-            glow: Color(0x332E6BFF),
+            background: Color(0xFF020B0E),
+            accent: Color(0xFF00FFFF),
+            accentText: Color(0xFF001619),
+            accentGlow: Color(0x6600FFFF),
+            primaryText: Color(0xFFF2FFFF),
+            secondaryText: Color(0xFF9FC1C6),
+            bodyText: Color(0xFFC6DEE1),
+            muted: Color(0xFF66868B),
+            card: Color(0xFF071418),
+            control: Color(0xFF0A1B20),
+            menu: Color(0xFF0D252A),
+            border: Color(0x4D00FFFF),
+            shadow: Color(0x99000000),
+            glow: Color(0x3300FFFF),
           )
         : const _AppleColors(
-            background: Color(0xFFF5F5F7),
-            primaryText: Color(0xFF1D1D1F),
-            secondaryText: Color(0xFF6E6E73),
-            bodyText: Color(0xFF424245),
+            background: Color(0xFFF4FBFC),
+            accent: Color(0xFF007C89),
+            accentText: Color(0xFFFFFFFF),
+            accentGlow: Color(0x3300AAB6),
+            primaryText: Color(0xFF162124),
+            secondaryText: Color(0xFF5B7277),
+            bodyText: Color(0xFF344A4F),
+            muted: Color(0xFF82979B),
             card: Color(0xFFFFFFFF),
             control: Color(0xFFFFFFFF),
             menu: Color(0xFFFFFFFF),
-            border: Color(0xFFE3E3E8),
-            shadow: Color(0x1A000000),
-            glow: Color(0xFFEAF2FF),
+            border: Color(0x33007C89),
+            shadow: Color(0x1600191D),
+            glow: Color(0xFFE5FBFC),
           );
   }
 }
