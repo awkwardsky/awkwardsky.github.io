@@ -1174,6 +1174,8 @@ class AppCopy {
     required this.dashboardDescription,
     required this.kageruneCategory,
     required this.kageruneDescription,
+    required this.tamatamaCategory,
+    required this.tamatamaDescription,
     required this.futureName,
     required this.futureCategory,
     required this.futureDescription,
@@ -1199,6 +1201,8 @@ class AppCopy {
   final String dashboardDescription;
   final String kageruneCategory;
   final String kageruneDescription;
+  final String tamatamaCategory;
+  final String tamatamaDescription;
   final String futureName;
   final String futureCategory;
   final String futureDescription;
@@ -1227,6 +1231,9 @@ class AppCopy {
         kageruneCategory: '私人 Flutter 遊戲',
         kageruneDescription:
             '以戰鬥演出與操作手感為主的 Flutter 遊戲專案。此處只提供錄製展示，原始碼與完整可玩版本維持 private。',
+        tamatamaCategory: '私人 Flutter 遊戲',
+        tamatamaDescription:
+            '以角色互動與遊戲流程展示為主的 Flutter 遊戲專案。此處只提供錄製展示，原始碼與完整可玩版本維持 private。',
         futureName: '更多專案',
         futureCategory: '專案索引',
         futureDescription: '新的工具、實驗或作品上線後，會以獨立卡片整理在這裡。',
@@ -1257,6 +1264,9 @@ class AppCopy {
         kageruneCategory: 'Private Flutter game',
         kageruneDescription:
             'A Flutter game project focused on combat presentation and game feel. This page provides a recorded showcase only; source code and the full playable build stay private.',
+        tamatamaCategory: 'Private Flutter game',
+        tamatamaDescription:
+            'A Flutter game project focused on character interaction and gameplay flow. This page provides a recorded showcase only; source code and the full playable build stay private.',
         futureName: 'More Projects',
         futureCategory: 'Project index',
         futureDescription:
@@ -1285,6 +1295,9 @@ class AppCopy {
         kageruneCategory: '非公開 Flutter ゲーム',
         kageruneDescription:
             '戦闘演出と操作感に重点を置いた Flutter ゲームプロジェクトです。ここでは録画展示のみを公開し、ソースコードと完全版は private のままにします。',
+        tamatamaCategory: '非公開 Flutter ゲーム',
+        tamatamaDescription:
+            'キャラクターのインタラクションとゲーム進行を中心にした Flutter ゲームプロジェクトです。ここでは録画展示のみを公開し、ソースコードと完全版は private のままにします。',
         futureName: 'More Projects',
         futureCategory: 'プロジェクト一覧',
         futureDescription: '新しいツール、実験、デモは個別のカードとしてここに追加します。',
@@ -1340,6 +1353,15 @@ class ProjectShowcase {
         status: copy.showcaseStatus,
         category: copy.kageruneCategory,
         description: copy.kageruneDescription,
+      ),
+      ProjectShowcase(
+        name: 'Tamatama',
+        url: 'showcases/tamatama_showcase_1080p.mp4',
+        actionLabel: copy.watchShowcase,
+        actionIcon: Icons.play_circle_fill_rounded,
+        status: copy.showcaseStatus,
+        category: copy.tamatamaCategory,
+        description: copy.tamatamaDescription,
       ),
       ProjectShowcase(
         name: copy.futureName,

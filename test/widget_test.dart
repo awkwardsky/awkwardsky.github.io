@@ -17,7 +17,8 @@ void main() {
     expect(find.text('ReactionSpeedLab'), findsOneWidget);
     expect(find.text('DashboardLab'), findsOneWidget);
     expect(find.text('Kagerune Color'), findsOneWidget);
-    expect(find.text('觀看影片'), findsOneWidget);
+    expect(find.text('Tamatama'), findsOneWidget);
+    expect(find.text('觀看影片'), findsNWidgets(2));
     expect(find.text('更多專案'), findsOneWidget);
   });
 }

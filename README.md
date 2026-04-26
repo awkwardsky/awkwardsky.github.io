@@ -9,6 +9,7 @@ private-project showcases, including:
 - `DashboardLab`: https://awkwardsky.github.io/DashboardLab/
 - `Kagerune Color`: video showcase only; source code and playable builds are
   private.
+- `Tamatama`: video showcase only; source code and playable builds are private.
 
 ## Local Development
 

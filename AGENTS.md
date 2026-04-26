@@ -28,4 +28,5 @@ awkwardsky
 ## Private Source Handling
 
 Do not copy source code from private local projects into this repository. For
-`kagerune-color`, only public showcase media under `web/showcases/` may be used.
+`kagerune-color` and `tamatama`, only public showcase media under
+`web/showcases/` may be used.
