@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -169,61 +171,64 @@ class _TopBar extends StatelessWidget {
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 1080),
-        child: Wrap(
-          spacing: 14,
-          runSpacing: 14,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          alignment: WrapAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 280,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: colors.accent,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: [
-                        BoxShadow(
-                          color: colors.accentGlow,
-                          blurRadius: 22,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Icon(
-                      Icons.auto_awesome_rounded,
-                      color: colors.accentText,
-                      size: 19,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Flexible(
-                    child: Text(
-                      copy.siteName,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: colors.primaryText,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0,
+        child: SizedBox(
+          width: double.infinity,
+          child: Wrap(
+            spacing: 14,
+            runSpacing: 14,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            alignment: WrapAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: 280,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: colors.accent,
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: colors.accentGlow,
+                            blurRadius: 22,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        Icons.auto_awesome_rounded,
+                        color: colors.accentText,
+                        size: 19,
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 12),
+                    Flexible(
+                      child: Text(
+                        copy.siteName,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: colors.primaryText,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            _TopBarControls(
-              copy: copy,
-              language: language,
-              themeMode: themeMode,
-              onLanguageChanged: onLanguageChanged,
-              onToggleTheme: onToggleTheme,
-            ),
-          ],
+              _TopBarControls(
+                copy: copy,
+                language: language,
+                themeMode: themeMode,
+                onLanguageChanged: onLanguageChanged,
+                onToggleTheme: onToggleTheme,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -410,49 +415,52 @@ class _HeroSection extends StatelessWidget {
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 1080),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final isNarrow = constraints.maxWidth < 520;
+        child: SizedBox(
+          width: double.infinity,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final isNarrow = constraints.maxWidth < 520;
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  copy.eyebrow,
-                  style: TextStyle(
-                    color: colors.accent,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: .2,
-                  ),
-                ),
-                const SizedBox(height: 18),
-                Text(
-                  copy.title,
-                  style: TextStyle(
-                    color: colors.primaryText,
-                    fontSize: isNarrow ? 56 : 76,
-                    height: isNarrow ? 1.04 : .95,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 700),
-                  child: Text(
-                    copy.subtitle,
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    copy.eyebrow,
                     style: TextStyle(
-                      color: colors.secondaryText,
-                      fontSize: isNarrow ? 18 : 21,
-                      height: 1.5,
-                      fontWeight: FontWeight.w500,
+                      color: colors.accent,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: .2,
                     ),
                   ),
-                ),
-              ],
-            );
-          },
+                  const SizedBox(height: 18),
+                  Text(
+                    copy.title,
+                    style: TextStyle(
+                      color: colors.primaryText,
+                      fontSize: isNarrow ? 54 : 76,
+                      height: isNarrow ? 1.04 : .95,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 700),
+                    child: Text(
+                      copy.subtitle,
+                      style: TextStyle(
+                        color: colors.secondaryText,
+                        fontSize: isNarrow ? 18 : 21,
+                        height: 1.5,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
@@ -472,45 +480,48 @@ class _ProjectGrid extends StatelessWidget {
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 1080),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              copy.projectsHeading,
-              style: TextStyle(
-                color: colors.accent,
-                fontSize: 24,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 0,
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                copy.projectsHeading,
+                style: TextStyle(
+                  color: colors.accent,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0,
+                ),
               ),
-            ),
-            const SizedBox(height: 18),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final columns = constraints.maxWidth >= 760 ? 2 : 1;
-                const spacing = 18.0;
-                final cardWidth =
-                    (constraints.maxWidth - (spacing * (columns - 1))) /
-                    columns;
+              const SizedBox(height: 18),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final columns = constraints.maxWidth >= 760 ? 2 : 1;
+                  const spacing = 18.0;
+                  final cardWidth =
+                      (constraints.maxWidth - (spacing * (columns - 1))) /
+                      columns;
 
-                return Wrap(
-                  spacing: spacing,
-                  runSpacing: spacing,
-                  children: [
-                    for (final entry in projects.indexed)
-                      SizedBox(
-                        width: cardWidth,
-                        child: _AnimatedProjectCard(
-                          delayIndex: entry.$1,
-                          project: entry.$2,
-                          copy: copy,
+                  return Wrap(
+                    spacing: spacing,
+                    runSpacing: spacing,
+                    children: [
+                      for (final entry in projects.indexed)
+                        SizedBox(
+                          width: cardWidth,
+                          child: _AnimatedProjectCard(
+                            delayIndex: entry.$1,
+                            project: entry.$2,
+                            copy: copy,
+                          ),
                         ),
-                      ),
-                  ],
-                );
-              },
-            ),
-          ],
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -673,18 +684,21 @@ class _Footer extends StatelessWidget {
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 1080),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            border: Border(top: BorderSide(color: colors.border)),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 22),
-            child: Text(
-              copy.footer,
-              style: TextStyle(
-                color: colors.secondaryText,
-                fontSize: 14,
-                height: 1.5,
+        child: SizedBox(
+          width: double.infinity,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border(top: BorderSide(color: colors.border)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 22),
+              child: Text(
+                copy.footer,
+                style: TextStyle(
+                  color: colors.secondaryText,
+                  fontSize: 14,
+                  height: 1.5,
+                ),
               ),
             ),
           ),
@@ -694,24 +708,365 @@ class _Footer extends StatelessWidget {
   }
 }
 
-class _PageBackground extends StatelessWidget {
+class _PageBackground extends StatefulWidget {
   const _PageBackground();
+
+  @override
+  State<_PageBackground> createState() => _PageBackgroundState();
+}
+
+class _PageBackgroundState extends State<_PageBackground>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 26),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final colors = _AppleColors.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.background,
-        gradient: RadialGradient(
-          center: const Alignment(.7, -1),
-          radius: 1.15,
-          colors: [colors.glow, colors.background, colors.background],
-          stops: const [0, .58, 1],
-        ),
+    return RepaintBoundary(
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return CustomPaint(
+            painter: _TechGeometryBackgroundPainter(
+              colors: colors,
+              isDark: isDark,
+              progress: _controller.value,
+            ),
+            child: const SizedBox.expand(),
+          );
+        },
       ),
     );
+  }
+}
+
+class _TechGeometryBackgroundPainter extends CustomPainter {
+  const _TechGeometryBackgroundPainter({
+    required this.colors,
+    required this.isDark,
+    required this.progress,
+  });
+
+  final _AppleColors colors;
+  final bool isDark;
+  final double progress;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    _paintBase(canvas, size);
+    _paintGrid(canvas, size);
+    _paintTriangulatedField(canvas, size);
+    _paintConstellation(canvas, size);
+    _paintOrbitArcs(canvas, size);
+    _paintWaveTrace(canvas, size);
+  }
+
+  void _paintBase(Canvas canvas, Size size) {
+    final rect = Offset.zero & size;
+    final backgroundPaint = Paint()
+      ..shader = LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: isDark
+            ? const [Color(0xFF010709), Color(0xFF031B20), Color(0xFF020B0E)]
+            : const [Color(0xFFF4FBFC), Color(0xFFE8FBFD), Color(0xFFF8FFFF)],
+      ).createShader(rect);
+
+    canvas.drawRect(rect, backgroundPaint);
+
+    final diagonalPaint = Paint()
+      ..shader = LinearGradient(
+        begin: Alignment.topRight,
+        end: Alignment.bottomLeft,
+        colors: [
+          colors.accent.withValues(alpha: isDark ? .2 : .1),
+          Colors.transparent,
+          colors.background.withValues(alpha: .18),
+        ],
+        stops: const [0, .5, 1],
+      ).createShader(rect);
+    canvas.drawRect(rect, diagonalPaint);
+  }
+
+  void _paintGrid(Canvas canvas, Size size) {
+    final step = size.width < 600 ? 34.0 : 48.0;
+    final phase = progress * step;
+    final gridPaint = Paint()
+      ..color = colors.accent.withValues(alpha: isDark ? .07 : .09)
+      ..strokeWidth = 1;
+
+    for (double x = -step + (phase % step); x < size.width + step; x += step) {
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), gridPaint);
+    }
+
+    for (
+      double y = -step + ((phase * .55) % step);
+      y < size.height + step;
+      y += step
+    ) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
+    }
+
+    final axisPaint = Paint()
+      ..color = colors.accent.withValues(alpha: isDark ? .1 : .12)
+      ..strokeWidth = 1.2;
+    canvas.drawLine(
+      Offset(size.width * .09, 0),
+      Offset(size.width * .09, size.height),
+      axisPaint,
+    );
+    canvas.drawLine(
+      Offset(0, size.height * .58),
+      Offset(size.width, size.height * .58),
+      axisPaint,
+    );
+  }
+
+  void _paintTriangulatedField(Canvas canvas, Size size) {
+    final points = <Offset>[
+      Offset(size.width * .42, size.height * .05),
+      Offset(size.width * .64, size.height * .08),
+      Offset(size.width * .88, size.height * .03),
+      Offset(size.width * .55, size.height * .28),
+      Offset(size.width * .78, size.height * .31),
+      Offset(size.width * 1.02, size.height * .24),
+      Offset(size.width * .58, size.height * .52),
+      Offset(size.width * .86, size.height * .5),
+      Offset(size.width * 1.05, size.height * .62),
+    ];
+
+    final drift = Offset(
+      math.sin(progress * math.pi * 2) * 10,
+      math.cos(progress * math.pi * 2) * 8,
+    );
+    final shifted = points.map((point) => point + drift).toList();
+    final linePaint = Paint()
+      ..color = colors.accent.withValues(alpha: isDark ? .16 : .12)
+      ..strokeWidth = 1.1
+      ..style = PaintingStyle.stroke;
+    final fillPaint = Paint()
+      ..color = colors.accent.withValues(alpha: isDark ? .035 : .045)
+      ..style = PaintingStyle.fill;
+
+    void triangle(int a, int b, int c) {
+      final path = Path()
+        ..moveTo(shifted[a].dx, shifted[a].dy)
+        ..lineTo(shifted[b].dx, shifted[b].dy)
+        ..lineTo(shifted[c].dx, shifted[c].dy)
+        ..close();
+      canvas.drawPath(path, fillPaint);
+      canvas.drawPath(path, linePaint);
+    }
+
+    triangle(0, 1, 3);
+    triangle(1, 3, 4);
+    triangle(1, 2, 4);
+    triangle(2, 4, 5);
+    triangle(3, 4, 6);
+    triangle(4, 6, 7);
+    triangle(4, 5, 7);
+    triangle(5, 7, 8);
+  }
+
+  void _paintConstellation(Canvas canvas, Size size) {
+    final nodes = <Offset>[
+      Offset(size.width * .12, size.height * .18),
+      Offset(size.width * .24, size.height * .08),
+      Offset(size.width * .34, size.height * .23),
+      Offset(size.width * .18, size.height * .42),
+      Offset(size.width * .32, size.height * .5),
+      Offset(size.width * .47, size.height * .37),
+      Offset(size.width * .61, size.height * .58),
+      Offset(size.width * .75, size.height * .44),
+      Offset(size.width * .91, size.height * .67),
+      Offset(size.width * .7, size.height * .82),
+      Offset(size.width * .46, size.height * .77),
+    ];
+
+    final animatedNodes = [
+      for (final entry in nodes.indexed)
+        entry.$2 +
+            Offset(
+              math.sin((progress * math.pi * 2) + entry.$1) * 5,
+              math.cos((progress * math.pi * 2) + entry.$1 * .7) * 5,
+            ),
+    ];
+
+    final connectionPaint = Paint()
+      ..color = colors.accent.withValues(alpha: isDark ? .16 : .14)
+      ..strokeWidth = 1;
+    final nodePaint = Paint()
+      ..color = colors.accent.withValues(alpha: isDark ? .7 : .62)
+      ..style = PaintingStyle.fill;
+    final nodeBorderPaint = Paint()
+      ..color = colors.background.withValues(alpha: .86)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5;
+
+    const pairs = [
+      (0, 1),
+      (0, 3),
+      (1, 2),
+      (2, 5),
+      (3, 4),
+      (4, 5),
+      (5, 6),
+      (6, 7),
+      (6, 10),
+      (7, 8),
+      (8, 9),
+      (9, 10),
+    ];
+
+    for (final pair in pairs) {
+      canvas.drawLine(
+        animatedNodes[pair.$1],
+        animatedNodes[pair.$2],
+        connectionPaint,
+      );
+    }
+
+    for (final node in animatedNodes) {
+      final rect = Rect.fromCenter(center: node, width: 6, height: 6);
+      canvas.save();
+      canvas.translate(node.dx, node.dy);
+      canvas.rotate(math.pi / 4);
+      canvas.translate(-node.dx, -node.dy);
+      canvas.drawRect(rect, nodePaint);
+      canvas.drawRect(rect, nodeBorderPaint);
+      canvas.restore();
+    }
+  }
+
+  void _paintOrbitArcs(Canvas canvas, Size size) {
+    final center = Offset(size.width * .78, size.height * .2);
+    final arcPaint = Paint()
+      ..color = colors.accent.withValues(alpha: isDark ? .28 : .18)
+      ..strokeWidth = 1.4
+      ..style = PaintingStyle.stroke;
+    final faintArcPaint = Paint()
+      ..color = colors.accent.withValues(alpha: isDark ? .1 : .08)
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
+
+    for (var i = 0; i < 4; i += 1) {
+      final radius = 78.0 + (i * 36);
+      final rect = Rect.fromCircle(center: center, radius: radius);
+      final start = progress * math.pi * 2 + (i * math.pi / 5);
+      canvas.drawArc(rect, start, math.pi * .65, false, arcPaint);
+      canvas.drawArc(
+        rect,
+        start + math.pi,
+        math.pi * .28,
+        false,
+        faintArcPaint,
+      );
+    }
+
+    _drawHexagon(
+      canvas,
+      center + Offset(size.width * .08, size.height * .08),
+      size.width < 600 ? 34 : 54,
+      colors.accent.withValues(alpha: isDark ? .22 : .14),
+    );
+  }
+
+  void _paintWaveTrace(Canvas canvas, Size size) {
+    final path = Path();
+    final baseline = size.height * .68;
+    final amplitude = size.height * .035;
+    final frequency = size.width < 600 ? .018 : .012;
+
+    for (double x = -20; x <= size.width + 20; x += 10) {
+      final y =
+          baseline +
+          math.sin((x * frequency) + progress * math.pi * 2) * amplitude +
+          math.sin((x * frequency * 2.7) - progress * math.pi * 3) *
+              amplitude *
+              .28;
+      if (x == -20) {
+        path.moveTo(x, y);
+      } else {
+        path.lineTo(x, y);
+      }
+    }
+
+    final wavePaint = Paint()
+      ..color = colors.accent.withValues(alpha: isDark ? .18 : .13)
+      ..strokeWidth = 1.2
+      ..style = PaintingStyle.stroke;
+    canvas.drawPath(path, wavePaint);
+
+    final mirrorPath = Path();
+    for (double x = -20; x <= size.width + 20; x += 10) {
+      final y =
+          baseline +
+          42 +
+          math.cos((x * frequency * 1.4) - progress * math.pi * 2) *
+              amplitude *
+              .72;
+      if (x == -20) {
+        mirrorPath.moveTo(x, y);
+      } else {
+        mirrorPath.lineTo(x, y);
+      }
+    }
+    canvas.drawPath(
+      mirrorPath,
+      Paint()
+        ..color = const Color(0xFF6AA6FF).withValues(alpha: isDark ? .13 : .08)
+        ..strokeWidth = 1
+        ..style = PaintingStyle.stroke,
+    );
+  }
+
+  void _drawHexagon(Canvas canvas, Offset center, double radius, Color color) {
+    final path = Path();
+    for (var i = 0; i < 6; i += 1) {
+      final angle = (math.pi / 3 * i) + (progress * math.pi * 2);
+      final point = Offset(
+        center.dx + math.cos(angle) * radius,
+        center.dy + math.sin(angle) * radius,
+      );
+      if (i == 0) {
+        path.moveTo(point.dx, point.dy);
+      } else {
+        path.lineTo(point.dx, point.dy);
+      }
+    }
+    path.close();
+
+    canvas.drawPath(
+      path,
+      Paint()
+        ..color = color
+        ..strokeWidth = 1.2
+        ..style = PaintingStyle.stroke,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_TechGeometryBackgroundPainter oldDelegate) {
+    return oldDelegate.progress != progress ||
+        oldDelegate.colors != colors ||
+        oldDelegate.isDark != isDark;
   }
 }
 
