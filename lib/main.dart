@@ -502,6 +502,7 @@ class _ProjectGrid extends StatelessWidget {
                   final cardWidth =
                       (constraints.maxWidth - (spacing * (columns - 1))) /
                       columns;
+                  final cardHeight = columns == 2 ? 392.0 : 374.0;
 
                   return Wrap(
                     spacing: spacing,
@@ -510,6 +511,7 @@ class _ProjectGrid extends StatelessWidget {
                       for (final entry in projects.indexed)
                         SizedBox(
                           width: cardWidth,
+                          height: cardHeight,
                           child: _AnimatedProjectCard(
                             delayIndex: entry.$1,
                             project: entry.$2,
@@ -570,7 +572,6 @@ class _ProjectCard extends StatelessWidget {
     final colors = _AppleColors.of(context);
 
     return Container(
-      constraints: const BoxConstraints(minHeight: 286),
       padding: const EdgeInsets.all(26),
       decoration: BoxDecoration(
         color: colors.card,
@@ -626,13 +627,17 @@ class _ProjectCard extends StatelessWidget {
             style: TextStyle(color: colors.accent, fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 20),
-          Text(
-            project.description,
-            style: TextStyle(
-              color: colors.bodyText,
-              fontSize: 16,
-              height: 1.55,
-              fontWeight: FontWeight.w500,
+          Expanded(
+            child: Text(
+              project.description,
+              maxLines: 5,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: colors.bodyText,
+                fontSize: 16,
+                height: 1.55,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           const SizedBox(height: 24),
