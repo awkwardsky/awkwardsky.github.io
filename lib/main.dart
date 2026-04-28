@@ -1352,7 +1352,7 @@ class ProjectShowcase {
       ),
       ProjectShowcase(
         name: 'Kagerune Color',
-        url: 'showcases/kagerune_combat_showcase_1080p.mp4',
+        url: 'https://youtube.com/shorts/7ZmOvh4i2ak?feature=share',
         actionLabel: copy.watchShowcase,
         actionIcon: Icons.play_circle_fill_rounded,
         status: copy.showcaseStatus,
@@ -1361,7 +1361,7 @@ class ProjectShowcase {
       ),
       ProjectShowcase(
         name: 'Tamatama',
-        url: 'showcases/tamatama_showcase_1080p.mp4',
+        url: 'https://youtu.be/MA1NGA2rvt4',
         actionLabel: copy.watchShowcase,
         actionIcon: Icons.play_circle_fill_rounded,
         status: copy.showcaseStatus,
